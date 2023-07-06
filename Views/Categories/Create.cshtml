@@ -1,0 +1,35 @@
+﻿@using Sklepix.Models;
+@model Category
+@{
+    ViewData["Title"] = "Create category";
+    string name = "";
+    string description = "";
+}
+
+@if(Model != null)
+{
+    name = (Model.Name == null) ? "" : Model.Name;
+    description = (Model.Description == null) ? "" : Model.Description;
+}
+
+<form asp-action="Create" style="width:50%;height:50%;margin-left:25%;">
+    <h2>Create category</h2>
+    <br />
+    <div class="form-group">
+        <label asp-for="Name">
+            <span>Category name</span>
+        </label>
+        <input asp-for="Name" class="form-control" placeholder="Category name..." value="@name" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="Description">
+            <span>Category description</span>
+        </label>
+        <textarea asp-for="Description" class="form-control" placeholder="Category description..." value="@description" ></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <br />
+    <input type="submit" class="form-control" value="Create category" />
+</form>

@@ -1,24 +1,42 @@
 ﻿@using Sklepix.Models;
-@model IEnumerable<Category> 
+@model IEnumerable<Category>
 @{
     ViewData["Title"] = "Categories";
 }
 
-<table>
+<button type="button" class="float-end btn btn-success">
+    <a asp-action="Create" class="text-reset text-decoration-none"><span>Add category</span></a>
+</button>
+
+<table class="table">
     <thead>
         <tr>
-            <th>ID</th>
-            <th>@Html.DisplayNameFor(model => model.Name)</th>
-            <th>Actions</th>
+            <th scope="col">@Html.DisplayNameFor(model => model.ID)</th>
+            <th scope="col">@Html.DisplayNameFor(model => model.Name)</th>
+            <th scope="col">Actions</th>
         </tr>
     </thead>
     <tbody>
         @foreach(Category c in Model)
         {
             <tr>
-                <td class="align-middle">@c.ID</td>
-                <td class="align-middle">@c.Name</td>
-                <td class="align-middle">None</td>
+                <td scope="row">
+                    <a asp-action="Details" asp-route-id="@c.ID" class="text-reset text-decoration-none">@c.ID</a>
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@c.ID" class="text-reset text-decoration-none">@c.Name</a>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-success">
+                        <a asp-action="Details" asp-route-id="@c.ID" class="text-reset text-decoration-none">Details</a>
+                    </button>
+                    <button type="button" class="btn btn-info">
+                        <a asp-action="Edit" asp-route-id="@c.ID" class="text-reset text-decoration-none">Edit</a>
+                    </button>
+                    <button type="button" class="btn btn-danger">
+                        <a asp-action="Delete" asp-route-id="@c.ID" class="text-reset text-decoration-none">Remove</a>
+                    </button>
+                </td>
             </tr>
         }
     </tbody>

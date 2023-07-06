@@ -1,0 +1,19 @@
+﻿@using Sklepix.Models
+@model Category
+@{
+    ViewData["Title"] = "Category details";
+}
+
+<button type="button" class="btn btn-success float-end">
+    <span><a asp-action="Index" class="text-reset text-decoration-none">Go back</a></span>
+</button>
+
+<h3>@Model.Name</h3>
+<hr/>
+
+@if(Model.Description == null)
+{
+    <span class="form-control text-danger">No description found</span>
+} else {
+    <span class="form-control">@Model.Description</span>
+}
