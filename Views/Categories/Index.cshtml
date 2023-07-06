@@ -1,0 +1,25 @@
+﻿@using Sklepix.Models;
+@model IEnumerable<Category> 
+@{
+    ViewData["Title"] = "Categories";
+}
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>@Html.DisplayNameFor(model => model.Name)</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(Category c in Model)
+        {
+            <tr>
+                <td class="align-middle">@c.ID</td>
+                <td class="align-middle">@c.Name</td>
+                <td class="align-middle">None</td>
+            </tr>
+        }
+    </tbody>
+</table>
