@@ -4,13 +4,18 @@
     ViewData["Title"] = "Create category";
     string name = "";
     string description = "";
+    if(Model != null)
+    {
+        name = (Model.Name == null) ? "" : Model.Name;
+        description = (Model.Description == null) ? "" : Model.Description;
+    }
 }
 
-@if(Model != null)
-{
-    name = (Model.Name == null) ? "" : Model.Name;
-    description = (Model.Description == null) ? "" : Model.Description;
-}
+<button type="button" class="btn btn-success float-end">
+    <a asp-action="Index" class="text-reset text-decoration-none">
+        <span>Go back</span>
+    </a>
+</button>
 
 <form asp-action="Create" style="width:50%;height:50%;margin-left:25%;">
     <h2>Create category</h2>
