@@ -5,9 +5,9 @@ namespace Sklepix.Data.Entities
     public class AisleEntity
     {
         [Key]
-        [Display(Name = "ID")]
         public int Id { get; set; }
-        [Display(Name = "Aisle name")]
-        public string name { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public ICollection<AisleRowEntity> Rows { get; set; }
     }
 }

@@ -8,6 +8,8 @@ namespace Sklepix.Data
 
         public DbSet<ProductEntity> Products { get; set; }
         public DbSet<CategoryEntity> Categories { get; set; }
+        public DbSet<AisleEntity> Aisles { get; set; }
+        public DbSet<AisleRowEntity> AislesRows { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

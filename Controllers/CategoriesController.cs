@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Sklepix.Data;
+using Sklepix.Data.DataTransfers;
 using Sklepix.Data.Entities;
-using Sklepix.Data.ViewModels;
+using Sklepix.Models.ViewModels;
 
 namespace Sklepix.Controllers
 {
@@ -49,15 +50,17 @@ namespace Sklepix.Controllers
         // POST: CategoriesController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(CategoryEntity category)
+        public ActionResult Create(CategoryDto category)
         {
+
             if(!isCategoryCorrect(category))
             {
                 return View(category);
             }
             try
             {
-                _context.Categories.Add(category);
+                CategoryEntity newCategory = new CategoryEntity() { Name = category.Name, Description = category.Description };
+                _context.Categories.Add(newCategory);
                 _context.SaveChanges();
                 return RedirectToAction("Index", "Categories");
             }
@@ -75,13 +78,13 @@ namespace Sklepix.Controllers
             {
                 return RedirectToAction("Index", "Categories");
             }
-            return View(category);
+            return View(new CategoryDto { Id = category.Id, Name = category.Name, Description = category.Description});
         }
 
         // POST: CategoriesController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(CategoryEntity category)
+        public ActionResult Edit(CategoryDto category)
         {
             if(!isCategoryCorrect(category))
             {
@@ -94,8 +97,9 @@ namespace Sklepix.Controllers
                 {
                     return View(category);
                 }
+                CategoryEntity newCategory = new CategoryEntity() { Name = category.Name, Description = category.Description };
                 _context.Categories.Remove(oldCategory);
-                _context.Categories.Add(category);
+                _context.Categories.Add(newCategory);
                 _context.SaveChanges();
                 return RedirectToAction("Index", "Categories");
             }
@@ -113,7 +117,7 @@ namespace Sklepix.Controllers
             {
                 return RedirectToAction("Index", "Categories");
             }
-            return View(category);
+            return View(new CategoryDto { Id = category.Id, Name = category.Name, Description = category.Description });
         }
 
         // POST: CategoriesController/Delete/5
@@ -137,7 +141,7 @@ namespace Sklepix.Controllers
             }
         }
 
-        private bool isCategoryCorrect(CategoryEntity category)
+        private bool isCategoryCorrect(CategoryDto category)
         {
             if("".Equals(category.Name) || category.Name == null)
             {

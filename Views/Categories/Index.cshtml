@@ -1,4 +1,4 @@
-﻿@using Sklepix.Data.ViewModels
+﻿@using Sklepix.Models.ViewModels
 @model IEnumerable<CategoryVm>
 @{
     ViewData["Title"] = "Categories";
@@ -8,7 +8,7 @@
     <a asp-action="Create" class="text-reset text-decoration-none"><span>Add category</span></a>
 </button>
 
-<table class="table">
+<table class="table align-middle">
     <thead>
         <tr>
             <th scope="col">@Html.DisplayNameFor(model => model.Id)</th>
