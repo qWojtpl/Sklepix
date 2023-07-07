@@ -1,0 +1,19 @@
+﻿@using Sklepix.Models.ViewModels
+@model AisleVm
+@{
+    ViewData["Title"] = "Delete aisle";
+}
+
+<div style="text-align: center;">
+    <h1>Are you sure you want to delete this aisle?</h1>
+    <h2>You'll delete all aisle rows!</h2>
+    <hr />
+    <h3>@Model.Name</h3>
+    <br />
+    <form asp-action="Delete" asp-route-id="@Model.Id">
+        <button onclick="window.location.href='@Url.Action("Index", "Aisles")'" type="button" class="btn btn-success" style="margin-right: 2.5%; padding-left: 30px; padding-right: 30px;">
+            No
+        </button>
+        <button type="submit" class="btn btn-danger" style="margin-left: 2.5%; padding-left: 30px; padding-right: 30px;">Yes</button>
+    </form>
+</div>

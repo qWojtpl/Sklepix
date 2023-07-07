@@ -1,0 +1,19 @@
+﻿@using Sklepix.Models.ViewModels
+@model AisleVm
+@{
+    ViewData["Title"] = "Aisle details";
+}
+
+<button onclick="window.location.href='@Url.Action("Index", "Aisles")'" type="button" class="btn btn-success float-end">
+    <span>Go back</span>
+</button>
+
+<h3>@Model.Name</h3>
+<hr/>
+
+@if(Model.Description == null)
+{
+    <span class="form-control text-danger">No description found</span>
+} else {
+    <span class="form-control">@Model.Description</span>
+}

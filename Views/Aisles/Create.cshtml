@@ -1,0 +1,38 @@
+﻿@using Sklepix.Data.DataTransfers
+@model AisleDto
+@{
+    ViewData["Title"] = "Create new aisle";
+    string name = "";
+    string description = "";
+    if(Model != null)
+    {
+        name = (Model.Name == null) ? "" : Model.Name;
+        description = (Model.Description == null) ? "" : Model.Description;
+    }
+}
+
+<button onclick="window.location.href='@Url.Action("Index", "Aisles")'" type="button" class="btn btn-success float-end">
+    <span>Go back</span>
+</button>
+
+<form asp-action="Create" style="width:50%;height:50%;margin-left:25%;">
+    <h2>Create aisle</h2>
+    <br />
+    <div class="form-group">
+        <label asp-for="Name">
+            <span>Aisle name</span>
+        </label>
+        <input asp-for="Name" class="form-control" placeholder="Aisle name..." value="@name" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="Description">
+            <span>Aisle description</span>
+        </label>
+        <textarea asp-for="Description" class="form-control" placeholder="Aisle description..." value="@description" ></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <br />
+    <input type="submit" class="form-control" value="Create new aisle" />
+</form>

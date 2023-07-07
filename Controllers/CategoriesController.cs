@@ -78,7 +78,7 @@ namespace Sklepix.Controllers
             {
                 return RedirectToAction("Index", "Categories");
             }
-            return View(new CategoryDto { Id = category.Id, Name = category.Name, Description = category.Description});
+            return View(new CategoryDto { Id = category.Id, Name = category.Name, Description = category.Description });
         }
 
         // POST: CategoriesController/Edit/5
@@ -97,7 +97,7 @@ namespace Sklepix.Controllers
                 {
                     return View(category);
                 }
-                CategoryEntity newCategory = new CategoryEntity() { Name = category.Name, Description = category.Description };
+                CategoryEntity newCategory = new CategoryEntity() { Id = category.Id, Name = category.Name, Description = category.Description };
                 _context.Categories.Remove(oldCategory);
                 _context.Categories.Add(newCategory);
                 _context.SaveChanges();
@@ -157,7 +157,7 @@ namespace Sklepix.Controllers
             {
                 if(category.Description.Contains("<") || category.Description.Contains(">"))
                 {
-                    ModelState.AddModelError("Name", "This field can't contain tag symbols");
+                    ModelState.AddModelError("Description", "This field can't contain tag symbols");
                     return false;
                 }
             }

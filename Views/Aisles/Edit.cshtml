@@ -1,0 +1,32 @@
+﻿@using Sklepix.Data.DataTransfers
+@model AisleDto
+@{
+    ViewData["Title"] = "Edit aisle";
+}
+
+<button onclick="window.location.href='@Url.Action("Index", "Aisles")'" type="button" class="btn btn-success float-end">
+    <span>Go back</span>
+</button>
+
+<form asp-action="Edit" style="width:50%;height:50%;margin-left:25%;">
+    <h2>Edit aisle: @Model.Name</h2>
+    <br />
+    <input asp-for="Id" type="hidden" />
+    <div class="form-group">
+        <label asp-for="Name">
+            <span>Aisle name</span>
+        </label>
+        <input asp-for="Name" type="text" class="form-control" placeholder="Aisle name..." />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="Description">
+            <span>Aisle description</span>
+        </label>
+        <textarea asp-for="Description" class="form-control" placeholder="Aisle description..." ></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <br />
+    <input type="submit" class="form-control" value="Edit aisle" />
+</form>

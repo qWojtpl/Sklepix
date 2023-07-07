@@ -1,6 +1,43 @@
 ﻿@using Sklepix.Models.ViewModels
-@model AisleVm
+@model IEnumerable<AisleVm>
 @{
     ViewData["Title"] = "Aisles";
 }
 
+<button type="button" class="float-end btn btn-success">
+    <a asp-action="Create" class="text-reset text-decoration-none"><span>Add new aisle</span></a>
+</button>
+
+<table class="table align-middle">
+    <thead>
+        <tr>
+            <th scope="col">@Html.DisplayNameFor(model => model.Id)</th>
+            <th scope="col">@Html.DisplayNameFor(model => model.Name)</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(AisleVm c in Model)
+        {
+            <tr>
+                <td scope="row">
+                    <a asp-action="Details" asp-route-id="@c.Id" class="text-reset text-decoration-none">@c.Id</a>
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@c.Id" class="text-reset text-decoration-none">@c.Name</a>
+                </td>
+                <td>
+                    <button onclick="window.location.href='@Url.Action("Details", "Aisles")/@c.Id'" type="button" class="btn btn-success">
+                        Details
+                    </button>
+                    <button onclick="window.location.href='@Url.Action("Edit", "Aisles")/@c.Id'" type="button" class="btn btn-info">
+                        Edit
+                    </button>
+                    <button onclick="window.location.href='@Url.Action("Delete", "Aisles")/@c.Id'" type="button" class="btn btn-danger">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
