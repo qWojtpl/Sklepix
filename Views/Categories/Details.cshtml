@@ -1,11 +1,11 @@
-﻿@using Sklepix.Models
-@model Category
+﻿@using Sklepix.Data.ViewModels
+@model CategoryVm
 @{
     ViewData["Title"] = "Category details";
 }
 
-<button type="button" class="btn btn-success float-end">
-    <span><a asp-action="Index" class="text-reset text-decoration-none">Go back</a></span>
+<button onclick="window.location.href='@Url.Action("Index", "Categories")'" type="button" class="btn btn-success float-end">
+    <span>Go back</span>
 </button>
 
 <h3>@Model.Name</h3>

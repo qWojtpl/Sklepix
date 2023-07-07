@@ -1,5 +1,5 @@
-﻿@using Sklepix.Models;
-@model IEnumerable<Category>
+﻿@using Sklepix.Data.ViewModels
+@model IEnumerable<CategoryVm>
 @{
     ViewData["Title"] = "Categories";
 }
@@ -11,30 +11,30 @@
 <table class="table">
     <thead>
         <tr>
-            <th scope="col">@Html.DisplayNameFor(model => model.ID)</th>
+            <th scope="col">@Html.DisplayNameFor(model => model.Id)</th>
             <th scope="col">@Html.DisplayNameFor(model => model.Name)</th>
             <th scope="col">Actions</th>
         </tr>
     </thead>
     <tbody>
-        @foreach(Category c in Model)
+        @foreach(CategoryVm c in Model)
         {
             <tr>
                 <td scope="row">
-                    <a asp-action="Details" asp-route-id="@c.ID" class="text-reset text-decoration-none">@c.ID</a>
+                    <a asp-action="Details" asp-route-id="@c.Id" class="text-reset text-decoration-none">@c.Id</a>
                 </td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@c.ID" class="text-reset text-decoration-none">@c.Name</a>
+                    <a asp-action="Details" asp-route-id="@c.Id" class="text-reset text-decoration-none">@c.Name</a>
                 </td>
                 <td>
-                    <button type="button" class="btn btn-success">
-                        <a asp-action="Details" asp-route-id="@c.ID" class="text-reset text-decoration-none">Details</a>
+                    <button onclick="window.location.href='@Url.Action("Details", "Categories")/@c.Id'" type="button" class="btn btn-success">
+                        Details
                     </button>
-                    <button type="button" class="btn btn-info">
-                        <a asp-action="Edit" asp-route-id="@c.ID" class="text-reset text-decoration-none">Edit</a>
+                    <button onclick="window.location.href='@Url.Action("Edit", "Categories")/@c.Id'" type="button" class="btn btn-info">
+                        Edit
                     </button>
-                    <button type="button" class="btn btn-danger">
-                        <a asp-action="Delete" asp-route-id="@c.ID" class="text-reset text-decoration-none">Remove</a>
+                    <button onclick="window.location.href='@Url.Action("Delete", "Categories")/@c.Id'" type="button" class="btn btn-danger">
+                        Delete
                     </button>
                 </td>
             </tr>

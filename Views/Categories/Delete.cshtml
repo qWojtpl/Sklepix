@@ -1,5 +1,5 @@
-﻿@using Sklepix.Models
-@model Category
+﻿@using Sklepix.Data.Entities
+@model CategoryEntity
 @{
     ViewData["Title"] = "Delete category";
 }
@@ -8,9 +8,9 @@
     <h1>Are you sure you want to delete this category?</h1>
     <h3>@Model.Name</h3>
     <br />
-    <form asp-action="Delete" asp-route-id="@Model.ID">
-        <button type="button" class="btn btn-success" style="margin-right: 2.5%; padding-left: 30px; padding-right: 30px;">
-            <a asp-action="Index" class="text-reset text-decoration-none">No</a>
+    <form asp-action="Delete" asp-route-id="@Model.Id">
+        <button onclick="window.location.href='@Url.Action("Index", "Categories")'" type="button" class="btn btn-success" style="margin-right: 2.5%; padding-left: 30px; padding-right: 30px;">
+            No
         </button>
         <button type="submit" class="btn btn-danger" style="margin-left: 2.5%; padding-left: 30px; padding-right: 30px;">Yes</button>
     </form>

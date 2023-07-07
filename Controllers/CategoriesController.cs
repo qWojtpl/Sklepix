@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Sklepix.Models;
+using Sklepix.Data;
+using Sklepix.Data.Entities;
+using Sklepix.Data.ViewModels;
 
 namespace Sklepix.Controllers
 {
@@ -18,18 +20,24 @@ namespace Sklepix.Controllers
         // GET: CategoriesController
         public ActionResult Index()
         {
-            return View(_context.Categories.ToList());
+            List<CategoryEntity> entity = _context.Categories.ToList();
+            List<CategoryVm> views = new List<CategoryVm>();
+            foreach(CategoryEntity e in entity)
+            {
+                views.Add(new CategoryVm { Id = e.Id, Name = e.Name, Description = e.Description });
+            }
+            return View(views);
         }
 
         // GET: CategoriesController/Details/5
         public ActionResult Details(int id)
         {
-            Category? category = _context.Categories.Find(id);
+            CategoryEntity? category = _context.Categories.Find(id);
             if(category == null)
             {
                 return RedirectToAction("Index", "Categories");
             }
-            return View(category);
+            return View(new CategoryVm() { Id = category.Id, Name = category.Name, Description = category.Description });
         }
 
         // GET: CategoriesController/Create
@@ -41,7 +49,7 @@ namespace Sklepix.Controllers
         // POST: CategoriesController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind("Name,Description")] Category category)
+        public ActionResult Create(CategoryEntity category)
         {
             if(!isCategoryCorrect(category))
             {
@@ -62,7 +70,7 @@ namespace Sklepix.Controllers
         // GET: CategoriesController/Edit/5
         public ActionResult Edit(int id)
         {
-            Category? category = _context.Categories.Find(id);
+            CategoryEntity? category = _context.Categories.Find(id);
             if (category == null)
             {
                 return RedirectToAction("Index", "Categories");
@@ -73,7 +81,7 @@ namespace Sklepix.Controllers
         // POST: CategoriesController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind("ID,Name,Description")] Category category)
+        public ActionResult Edit(CategoryEntity category)
         {
             if(!isCategoryCorrect(category))
             {
@@ -81,7 +89,7 @@ namespace Sklepix.Controllers
             }
             try
             {
-                Category? oldCategory = _context.Categories.Find(category.ID);
+                CategoryEntity? oldCategory = _context.Categories.Find(category.Id);
                 if(oldCategory == null)
                 {
                     return View(category);
@@ -100,7 +108,7 @@ namespace Sklepix.Controllers
         // GET: CategoriesController/Delete/5
         public ActionResult Delete(int id)
         {
-            Category? category = _context.Categories.Find(id);
+            CategoryEntity? category = _context.Categories.Find(id);
             if(category == null)
             {
                 return RedirectToAction("Index", "Categories");
@@ -115,7 +123,7 @@ namespace Sklepix.Controllers
         {
             try
             {
-                Category? category = _context.Categories.Find(id);
+                CategoryEntity? category = _context.Categories.Find(id);
                 if(category != null)
                 {
                     _context.Categories.Remove(category);
@@ -129,7 +137,7 @@ namespace Sklepix.Controllers
             }
         }
 
-        private bool isCategoryCorrect(Category category)
+        private bool isCategoryCorrect(CategoryEntity category)
         {
             if("".Equals(category.Name) || category.Name == null)
             {
