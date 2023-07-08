@@ -31,7 +31,7 @@
     <span>Add new row</span>
 </button>
 
-<table class="table">
+<table class="table align-middle">
     <thead>
         <tr>
             <th scope="row">Row number</th>
@@ -43,6 +43,11 @@
         {
             <tr>
                 <td>@row</td>
+                <td>
+                    <button onclick="window.location.href='@Url.Action("DeleteRow", "Aisles")/@Model.Id/@row'" type="button" class="btn btn-danger">
+                        Delete
+                    </button>
+                </td>
             </tr>
         }
     </tbody>

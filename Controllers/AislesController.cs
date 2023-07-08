@@ -3,6 +3,7 @@ using Sklepix.Data.Entities;
 using Sklepix.Data;
 using Sklepix.Models.ViewModels;
 using Sklepix.Data.DataTransfers;
+using System.Security.Principal;
 
 namespace Sklepix.Controllers
 {
@@ -99,7 +100,7 @@ namespace Sklepix.Controllers
                 {
                     if(rows[i].Equals(aisleRow.RowNumber.ToString()))
                     {
-                        ModelState.AddModelError("Description", "This row already exists");
+                        ModelState.AddModelError("RowNumber", "This row already exists");
                         return View(aisleRow);
                     }
                 }
@@ -181,6 +182,45 @@ namespace Sklepix.Controllers
                     _context.SaveChanges();
                 }
                 return RedirectToAction("Index", "Aisles");
+            }
+            catch
+            {
+                return RedirectToAction("Index", "Aisles");
+            }
+        }
+
+        // GET: AislesController/DeleteRow/AisleId/Row
+        public ActionResult DeleteRow(int id, int secondId)
+        {
+            return View(new AisleRowDto { AisleId = id, RowNumber = secondId });
+        }
+
+        // GET: AislesController/DeleteRow/AisleId/Row
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteRow(AisleRowDto aisleRow)
+        {
+            try
+            {
+                AisleEntity? oldEntity = _context.Aisles.Find(aisleRow.AisleId);
+                if(oldEntity == null)
+                {
+                    return RedirectToAction("Index", "Aisles");                    
+                }
+                string[] split = oldEntity.Rows.Split(";");
+                string rows = "";
+                for (int i = 1; i < split.Length; i++)
+                {
+                    if(!split[i].Equals(aisleRow.RowNumber.ToString()))
+                    {
+                        rows += ";" + split[i];
+                    }
+                }
+                AisleEntity newEntity = new AisleEntity() { Id = oldEntity.Id, Name = oldEntity.Name, Description = oldEntity.Description, Rows = rows };
+                _context.Aisles.Remove(oldEntity);
+                _context.Aisles.Add(newEntity);
+                _context.SaveChanges();
+                return RedirectToAction("Details", "Aisles", new { id = aisleRow.AisleId });
             }
             catch
             {

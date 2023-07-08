@@ -1,0 +1,20 @@
+﻿@using Sklepix.Data.DataTransfers
+@model AisleRowDto
+@{
+    ViewData["Title"] = "Delete aisle row";
+}
+
+<div style="text-align: center;">
+    <h1>Are you sure you want to delete this aisle row?</h1>
+    <hr />
+    <h3>@Model.RowNumber</h3>
+    <br />
+    <form asp-action="DeleteRow">
+        <input asp-for="AisleId" type="hidden" value="@Model.AisleId" />
+        <input asp-for="RowNumber" type="hidden" value="@Model.RowNumber" />
+        <button onclick="window.location.href='@Url.Action("Details", "Aisles")/@Model.AisleId'" type="button" class="btn btn-success" style="margin-right: 2.5%; padding-left: 30px; padding-right: 30px;">
+            No
+        </button>
+        <button type="submit" class="btn btn-danger" style="margin-left: 2.5%; padding-left: 30px; padding-right: 30px;">Yes</button>
+    </form>
+</div>
