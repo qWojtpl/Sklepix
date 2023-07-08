@@ -1,0 +1,24 @@
+﻿@using Sklepix.Data.DataTransfers
+@model AisleRowDto
+@{
+    ViewData["Title"] = "Create new aisle row";
+}
+
+<button onclick="window.location.href='@Url.Action("Details", "Aisles")/@Model.AisleId'" type="button" class="btn btn-success float-end">
+    <span>Go back</span>
+</button>
+
+<form asp-action="CreateRow" style="width:50%;height:50%;margin-left:25%;">
+    <h2>Create aisle row</h2>
+    <br />
+    <input asp-for="AisleId" type="hidden" value="@Model.AisleId" />
+    <div class="form-group">
+        <label asp-for="RowNumber">
+            <span>Row number</span>
+        </label>
+        <input asp-for="RowNumber" type="number" class="form-control" placeholder="Aisle row number..." />
+        <span asp-validation-for="RowNumber" class="text-danger"></span>
+    </div>
+    <br />
+    <input type="submit" class="form-control" value="Create new aisle row" />
+</form>

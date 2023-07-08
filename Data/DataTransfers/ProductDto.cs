@@ -1,10 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Sklepix.Data.Entities;
 
-namespace Sklepix.Data.Entities
+namespace Sklepix.Data.DataTransfers
 {
-    public class ProductEntity
+    public class ProductDto
     {
-        [Key]
         public int Id { get; set; }
         public string Name { get; set; }
         public string? Description { get; set; }
@@ -13,6 +12,6 @@ namespace Sklepix.Data.Entities
         public CategoryEntity? Category { get; set; }
         public AisleEntity Aisle { get; set; }
         public int Row { get; set; }
-    }
 
+    }
 }

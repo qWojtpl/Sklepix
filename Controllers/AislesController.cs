@@ -22,12 +22,12 @@ namespace Sklepix.Controllers
             List<AisleVm> views = new List<AisleVm>();
             foreach(AisleEntity e in entities)
             {
-                views.Add(new AisleVm { Id = e.Id, Name = e.Name, Description = e.Description });
+                views.Add(new AisleVm { Id = e.Id, Name = e.Name, Description = e.Description, Rows = e.Rows });
             }
             return View(views);
         }
 
-        // GET: AislesController/Create
+        // GET: AislesController/Details
         public ActionResult Details(int id)
         {
             AisleEntity? aisle = _context.Aisles.Find(id);
@@ -35,7 +35,7 @@ namespace Sklepix.Controllers
             {
                 return RedirectToAction("Index", "Aisles");
             }
-            return View(new AisleVm() { Id = aisle.Id, Name = aisle.Name, Description = aisle.Description });
+            return View(new AisleVm() { Id = aisle.Id, Name = aisle.Name, Description = aisle.Description, Rows = aisle.Rows });
         }
 
         // GET: AislesController/Create
@@ -43,7 +43,7 @@ namespace Sklepix.Controllers
         {
             return View();
         }
-
+        
         // POST: AislesController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -63,7 +63,57 @@ namespace Sklepix.Controllers
             }
             catch
             {
-                return View();
+                return View(aisle);
+            }
+        }
+
+        // GET: AislesController/CreateRow/AisleID
+        public ActionResult CreateRow(int id)
+        {
+            AisleEntity? aisle = _context.Aisles.Find(id);
+            if(aisle == null)
+            {
+                return RedirectToAction("Index", "Aisles");
+            }
+            return View(new AisleRowDto() { AisleId = aisle.Id });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateRow(AisleRowDto aisleRow)
+        {
+            try
+            {
+                AisleEntity? oldEntity = _context.Aisles.Find(aisleRow.AisleId);
+                if(oldEntity == null)
+                {
+                    return View(aisleRow);
+                }
+                string[] split = oldEntity.Rows.Split(";");
+                string[] rows = new string[split.Length - 1];
+                for (int i = 1; i < split.Length; i++)
+                {
+                    rows[i - 1] = split[i];
+                }
+                for(int i = 0; i < rows.Length; i++)
+                {
+                    if(rows[i].Equals(aisleRow.RowNumber.ToString()))
+                    {
+                        ModelState.AddModelError("Description", "This row already exists");
+                        return View(aisleRow);
+                    }
+                }
+                _context.Aisles.Remove(oldEntity);
+                string entityRows = oldEntity.Rows;
+                entityRows += ";" + aisleRow.RowNumber;
+                AisleEntity newEntity = new AisleEntity { Id = oldEntity.Id, Name = oldEntity.Name, Description = oldEntity.Description, Rows = entityRows };
+                _context.Aisles.Add(newEntity);
+                _context.SaveChanges();
+                return RedirectToAction("Details", "Aisles", new { id = aisleRow.AisleId });
+            }
+            catch
+            {
+                return View(aisleRow);
             }
         }
 
@@ -114,7 +164,7 @@ namespace Sklepix.Controllers
             {
                 return RedirectToAction("Index", "Aisles");
             }
-            return View(new AisleDto { Id = aisle.Id, Name = aisle.Name, Description = aisle.Description });
+            return View(new AisleVm { Id = aisle.Id, Name = aisle.Name, Description = aisle.Description });
         }
 
         // POST: AislesController/Delete/5
@@ -134,17 +184,12 @@ namespace Sklepix.Controllers
             }
             catch
             {
-                return View();
+                return RedirectToAction("Index", "Aisles");
             }
         }
 
         private bool isAisleCorrect(AisleDto aisle)
         {
-            if("".Equals(aisle.Name) || aisle.Name == null)
-            {
-                ModelState.AddModelError("Name", "This field is required");
-                return false;
-            }
             if(aisle.Name.Contains("<") || aisle.Name.Contains(">"))
             {
                 ModelState.AddModelError("Name", "This field can't contain tag symbols");

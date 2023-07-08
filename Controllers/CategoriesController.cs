@@ -66,7 +66,7 @@ namespace Sklepix.Controllers
             }
             catch
             {
-                return View();
+                return View(category);
             }
         }
 
@@ -137,17 +137,12 @@ namespace Sklepix.Controllers
             }
             catch
             {
-                return View();
+                return RedirectToAction("Index", "Categories");
             }
         }
 
         private bool isCategoryCorrect(CategoryDto category)
         {
-            if("".Equals(category.Name) || category.Name == null)
-            {
-                ModelState.AddModelError("Name", "This field is required");
-                return false;
-            }
             if(category.Name.Contains("<") || category.Name.Contains(">"))
             {
                 ModelState.AddModelError("Name", "This field can't contain tag symbols");

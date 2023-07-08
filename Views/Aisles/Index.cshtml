@@ -4,8 +4,8 @@
     ViewData["Title"] = "Aisles";
 }
 
-<button type="button" class="float-end btn btn-success">
-    <a asp-action="Create" class="text-reset text-decoration-none"><span>Add new aisle</span></a>
+<button onclick="window.location.href='@Url.Action("Create", "Aisles")'" type="button" class="float-end btn btn-success">
+    <span>Add new aisle</span>
 </button>
 
 <table class="table align-middle">

@@ -1,7 +1,14 @@
-﻿@using Sklepix.Models.ViewModels
+﻿@using Sklepix.Data.Entities
+@using Sklepix.Models.ViewModels
 @model AisleVm
 @{
     ViewData["Title"] = "Aisle details";
+    string[] split = Model.Rows.Split(";");
+    string[] rows = new string[split.Length - 1];
+    for(int i = 1; i < split.Length; i++)
+    {
+        rows[i - 1] = split[i];
+    }
 }
 
 <button onclick="window.location.href='@Url.Action("Index", "Aisles")'" type="button" class="btn btn-success float-end">
@@ -17,3 +24,26 @@
 } else {
     <span class="form-control">@Model.Description</span>
 }
+
+<hr />
+
+<button onclick="window.location.href='@Url.Action("CreateRow", "Aisles")/@Model.Id'" type="button" class="btn btn-success float-end">
+    <span>Add new row</span>
+</button>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="row">Row number</th>
+            <th scope="row">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(string row in rows) 
+        {
+            <tr>
+                <td>@row</td>
+            </tr>
+        }
+    </tbody>
+</table>

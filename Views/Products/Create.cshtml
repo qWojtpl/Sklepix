@@ -1,0 +1,38 @@
+﻿@using Sklepix.Data.DataTransfers
+@model ProductDto
+@{
+    ViewData["Title"] = "Create product";
+    string name = "";
+    string description = "";
+    if(Model != null)
+    {
+        name = (Model.Name == null) ? "" : Model.Name;
+        description = (Model.Description == null) ? "" : Model.Description;
+    }
+}
+
+<button onclick="window.location.href='@Url.Action("Index", "Products")'" type="button" class="btn btn-success float-end">
+    <span>Go back</span>
+</button>
+
+<form asp-action="Create" style="width:50%;height:50%;margin-left:25%;">
+    <h2>Create product</h2>
+    <br />
+    <div class="form-group">
+        <label asp-for="Name">
+            <span>Product name</span>
+        </label>
+        <input asp-for="Name" class="form-control" placeholder="Product name..." value="@name" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="Description">
+            <span>Category description</span>
+        </label>
+        <textarea asp-for="Description" class="form-control" placeholder="Product description..." value="@description" ></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <br />
+    <input type="submit" class="form-control" value="Create product" />
+</form>
