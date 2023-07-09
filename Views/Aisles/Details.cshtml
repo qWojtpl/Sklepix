@@ -3,12 +3,6 @@
 @model AisleVm
 @{
     ViewData["Title"] = "Aisle details";
-    string[] split = Model.Rows.Split(";");
-    string[] rows = new string[split.Length - 1];
-    for(int i = 1; i < split.Length; i++)
-    {
-        rows[i - 1] = split[i];
-    }
 }
 
 <button onclick="window.location.href='@Url.Action("Index", "Aisles")'" type="button" class="btn btn-success float-end">
@@ -39,12 +33,12 @@
         </tr>
     </thead>
     <tbody>
-        @foreach(string row in rows) 
+        @foreach(AisleRowEntity row in Model.Rows) 
         {
             <tr>
-                <td>@row</td>
+                <td>@row.RowNumber</td>
                 <td>
-                    <button onclick="window.location.href='@Url.Action("DeleteRow", "Aisles")/@Model.Id/@row'" type="button" class="btn btn-danger">
+                    <button onclick="window.location.href='@Url.Action("DeleteRow", "Aisles")/@Model.Id/@row.RowNumber'" type="button" class="btn btn-danger">
                         Delete
                     </button>
                 </td>

@@ -9,8 +9,8 @@ namespace Sklepix.Data.DataTransfers
         public string? Description { get; set; }
         public int Count { get; set; }
         public double Price { get; set; }
-        public CategoryEntity? Category { get; set; }
-        public AisleEntity Aisle { get; set; }
+        public int CategoryId { get; set; }
+        public int AisleId { get; set; }
         public int Row { get; set; }
 
     }

@@ -9,6 +9,7 @@ namespace Sklepix.Data
         public DbSet<ProductEntity> Products { get; set; }
         public DbSet<CategoryEntity> Categories { get; set; }
         public DbSet<AisleEntity> Aisles { get; set; }
+        public DbSet<AisleRowEntity> AisleRows { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

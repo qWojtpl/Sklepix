@@ -4,10 +4,14 @@
     ViewData["Title"] = "Create product";
     string name = "";
     string description = "";
+    int count = 0;
+    double price = 0.00;
     if(Model != null)
     {
         name = (Model.Name == null) ? "" : Model.Name;
         description = (Model.Description == null) ? "" : Model.Description;
+        count = Model.Count;
+        price = Model.Price;
     }
 }
 
@@ -28,10 +32,24 @@
     <br />
     <div class="form-group">
         <label asp-for="Description">
-            <span>Category description</span>
+            <span>Product description</span>
         </label>
         <textarea asp-for="Description" class="form-control" placeholder="Product description..." value="@description" ></textarea>
         <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Count">
+            <span>Count</span>
+        </label>
+        <input asp-for="Count" type="number" step="1" class="form-control" placeholder="Count..." value="@count" />
+        <span asp-validation-for="Count" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Price">
+            <span>Price</span>
+        </label>
+        <input asp-for="Price" type="number" step="0.01" class="form-control" placeholder="Price..." value="@price" />
+        <span asp-validation-for="Price" class="text-danger"></span>
     </div>
     <br />
     <input type="submit" class="form-control" value="Create product" />

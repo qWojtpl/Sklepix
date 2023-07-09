@@ -1,16 +1,16 @@
 ﻿@using Sklepix.Data.DataTransfers
-@model CategoryDto
+@model ProductDto
 @{
     ViewData["Title"] = "Delete category";
 }
 
 <div style="text-align: center;">
-    <h1>Are you sure you want to delete this category?</h1>
+    <h1>Are you sure you want to delete this product?</h1>
     <hr />
     <h3>@Model.Name</h3>
     <br />
     <form asp-action="Delete">
-        <button onclick="window.location.href='@Url.Action("Index", "Categories")'" type="button" class="btn btn-success" style="margin-right: 2.5%; padding-left: 30px; padding-right: 30px;">
+        <button onclick="window.location.href='@Url.Action("Index", "Products")'" type="button" class="btn btn-success" style="margin-right: 2.5%; padding-left: 30px; padding-right: 30px;">
             No
         </button>
         <button type="submit" class="btn btn-danger" style="margin-left: 2.5%; padding-left: 30px; padding-right: 30px;">Yes</button>

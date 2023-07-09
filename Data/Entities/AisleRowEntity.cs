@@ -2,11 +2,11 @@
 
 namespace Sklepix.Data.Entities
 {
-    public class AisleEntity
+    public class AisleRowEntity
     {
         [Key]
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string? Description { get; set; }
+        public int RowNumber { get; set; }
+        public AisleEntity Aisle { get; set; }
     }
 }

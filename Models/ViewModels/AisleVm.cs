@@ -10,8 +10,7 @@ namespace Sklepix.Models.ViewModels
         [Display(Name = "Aisle name")]
         public string Name { get; set; }
         public string? Description { get; set; }
-        [Display(Name = "Rows")]
-        public string Rows { get; set; } = "";
+        public List<AisleRowEntity> Rows { get; set; }
 
     }
 }

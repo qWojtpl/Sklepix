@@ -1,11 +1,11 @@
 ﻿@using Sklepix.Models.ViewModels
-@model IEnumerable<CategoryVm>
+@model IEnumerable<ProductVm>
 @{
-    ViewData["Title"] = "Categories";
+    ViewData["Title"] = "Products";
 }
 
-<button onclick="window.location.href='@Url.Action("Create", "Categories")'" type="button" class="float-end btn btn-success">
-    <span>Add category</span>
+<button onclick="window.location.href='@Url.Action("Create", "Products")'" type="button" class="float-end btn btn-success">
+    <span>Add product</span>
 </button>
 
 <table class="table align-middle">
@@ -13,11 +13,13 @@
         <tr>
             <th scope="col">@Html.DisplayNameFor(model => model.Id)</th>
             <th scope="col">@Html.DisplayNameFor(model => model.Name)</th>
+            <th scope="col">@Html.DisplayNameFor(model => model.Count)</th>
+            <th scope="col">@Html.DisplayNameFor(model => model.Price)</th>
             <th scope="col">Actions</th>
         </tr>
     </thead>
     <tbody>
-        @foreach(CategoryVm c in Model)
+        @foreach(ProductVm c in Model)
         {
             <tr>
                 <td scope="row">
@@ -27,13 +29,19 @@
                     <a asp-action="Details" asp-route-id="@c.Id" class="text-reset text-decoration-none">@c.Name</a>
                 </td>
                 <td>
-                    <button onclick="window.location.href='@Url.Action("Details", "Categories")/@c.Id'" type="button" class="btn btn-success">
+                    <a asp-action="Details" asp-route-id="@c.Id" class="text-reset text-decoration-none">@c.Count</a>
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@c.Id" class="text-reset text-decoration-none">@c.Price</a>
+                </td>
+                <td>
+                    <button onclick="window.location.href='@Url.Action("Details", "Products")/@c.Id'" type="button" class="btn btn-success">
                         Details
                     </button>
-                    <button onclick="window.location.href='@Url.Action("Edit", "Categories")/@c.Id'" type="button" class="btn btn-info">
+                    <button onclick="window.location.href='@Url.Action("Edit", "Products")/@c.Id'" type="button" class="btn btn-info">
                         Edit
                     </button>
-                    <button onclick="window.location.href='@Url.Action("Delete", "Categories")/@c.Id'" type="button" class="btn btn-danger">
+                    <button onclick="window.location.href='@Url.Action("Delete", "Products")/@c.Id'" type="button" class="btn btn-danger">
                         Delete
                     </button>
                 </td>

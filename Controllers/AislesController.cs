@@ -23,7 +23,16 @@ namespace Sklepix.Controllers
             List<AisleVm> views = new List<AisleVm>();
             foreach(AisleEntity e in entities)
             {
-                views.Add(new AisleVm { Id = e.Id, Name = e.Name, Description = e.Description, Rows = e.Rows });
+                List<AisleRowEntity> rows = _context.AisleRows.ToList();
+                List<AisleRowEntity> rowsForView = new List<AisleRowEntity>();
+                foreach(AisleRowEntity row in rows) 
+                {
+                    if(row.Aisle.Equals(e))
+                    {
+                        rowsForView.Add(row);
+                    }
+                }
+                views.Add(new AisleVm { Id = e.Id, Name = e.Name, Description = e.Description, Rows = rowsForView });
             }
             return View(views);
         }
@@ -36,7 +45,19 @@ namespace Sklepix.Controllers
             {
                 return RedirectToAction("Index", "Aisles");
             }
-            return View(new AisleVm() { Id = aisle.Id, Name = aisle.Name, Description = aisle.Description, Rows = aisle.Rows });
+            List<AisleRowEntity> rows = _context.AisleRows.ToList();
+            List<AisleRowEntity> rowsForView = new List<AisleRowEntity>();
+            if(rows.Count > 0)
+            {
+                foreach(AisleRowEntity row in rows)
+                {
+                    if(row.Aisle.Equals(aisle))
+                    {
+                        rowsForView.Add(row);
+                    }
+                }
+            }
+            return View(new AisleVm() { Id = aisle.Id, Name = aisle.Name, Description = aisle.Description, Rows = rowsForView });
         }
 
         // GET: AislesController/Create
@@ -85,30 +106,12 @@ namespace Sklepix.Controllers
         {
             try
             {
-                AisleEntity? oldEntity = _context.Aisles.Find(aisleRow.AisleId);
-                if(oldEntity == null)
+                AisleEntity? aisle = _context.Aisles.Find(aisleRow.AisleId);
+                if(aisle == null)
                 {
                     return View(aisleRow);
                 }
-                string[] split = oldEntity.Rows.Split(";");
-                string[] rows = new string[split.Length - 1];
-                for (int i = 1; i < split.Length; i++)
-                {
-                    rows[i - 1] = split[i];
-                }
-                for(int i = 0; i < rows.Length; i++)
-                {
-                    if(rows[i].Equals(aisleRow.RowNumber.ToString()))
-                    {
-                        ModelState.AddModelError("RowNumber", "This row already exists");
-                        return View(aisleRow);
-                    }
-                }
-                _context.Aisles.Remove(oldEntity);
-                string entityRows = oldEntity.Rows;
-                entityRows += ";" + aisleRow.RowNumber;
-                AisleEntity newEntity = new AisleEntity { Id = oldEntity.Id, Name = oldEntity.Name, Description = oldEntity.Description, Rows = entityRows };
-                _context.Aisles.Add(newEntity);
+                _context.AisleRows.Add(new AisleRowEntity { RowNumber = aisleRow.RowNumber, Aisle = aisle } );
                 _context.SaveChanges();
                 return RedirectToAction("Details", "Aisles", new { id = aisleRow.AisleId });
             }
@@ -207,16 +210,7 @@ namespace Sklepix.Controllers
                 {
                     return RedirectToAction("Index", "Aisles");                    
                 }
-                string[] split = oldEntity.Rows.Split(";");
-                string rows = "";
-                for (int i = 1; i < split.Length; i++)
-                {
-                    if(!split[i].Equals(aisleRow.RowNumber.ToString()))
-                    {
-                        rows += ";" + split[i];
-                    }
-                }
-                AisleEntity newEntity = new AisleEntity() { Id = oldEntity.Id, Name = oldEntity.Name, Description = oldEntity.Description, Rows = rows };
+                AisleEntity newEntity = new AisleEntity() { Id = oldEntity.Id, Name = oldEntity.Name, Description = oldEntity.Description };
                 _context.Aisles.Remove(oldEntity);
                 _context.Aisles.Add(newEntity);
                 _context.SaveChanges();
