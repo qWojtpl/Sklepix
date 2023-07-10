@@ -5,7 +5,7 @@
     string name = "";
     string description = "";
     int count = 0;
-    double price = 0.00;
+    int price = 0;
     if(Model != null)
     {
         name = (Model.Name == null) ? "" : Model.Name;
@@ -48,8 +48,32 @@
         <label asp-for="Price">
             <span>Price</span>
         </label>
-        <input asp-for="Price" type="number" step="0.01" class="form-control" placeholder="Price..." value="@price" />
+        <input asp-for="Price" type="number" step="1" class="form-control" placeholder="Price..." value="@price" />
         <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="CategoryName">
+            <span>Category</span>
+        </label>
+        <select asp-for="CategoryName" class="form-control">
+            @foreach(string categoryName in Model.CategoriesNames)
+            {
+                <option value="@categoryName">@categoryName</option>
+            }
+        </select>
+        <span asp-validation-for="CategoryName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="AisleNames">
+            <span>Aisle</span>
+        </label>
+        <select asp-for="AisleName" class="form-control">
+            @foreach(string aisleName in Model.AisleNames)
+            {
+                <option value="@aisleName">@aisleName</option>
+            }
+        </select>
+        <span asp-validation-for="AisleName" class="text-danger"></span>
     </div>
     <br />
     <input type="submit" class="form-control" value="Create product" />

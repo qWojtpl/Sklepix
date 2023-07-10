@@ -9,24 +9,62 @@
 </button>
 
 <form asp-action="Edit" style="width:50%;height:50%;margin-left:25%;">
-    <h2>Edit category: @Model.Name</h2>
+    <h2>Edit product: @Model.Name</h2>
     <br />
     <input asp-for="Id" type="hidden" />
     <div class="form-group">
         <label asp-for="Name">
-            <span>Category name</span>
+            <span>Product name</span>
         </label>
-        <input asp-for="Name" type="text" class="form-control" placeholder="Category name..." />
+        <input asp-for="Name" class="form-control" placeholder="Product name..." value="@Model.Name" />
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
     <br />
     <div class="form-group">
         <label asp-for="Description">
-            <span>Category description</span>
+            <span>Product description</span>
         </label>
-        <textarea asp-for="Description" class="form-control" placeholder="Category description..." ></textarea>
+        <textarea asp-for="Description" class="form-control" placeholder="Product description..." value="@Model.Description"></textarea>
         <span asp-validation-for="Description" class="text-danger"></span>
     </div>
+    <div class="form-group">
+        <label asp-for="Count">
+            <span>Count</span>
+        </label>
+        <input asp-for="Count" type="number" step="1" class="form-control" placeholder="Count..." value="@Model.Count" />
+        <span asp-validation-for="Count" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Price">
+            <span>Price</span>
+        </label>
+        <input asp-for="Price" type="number" step="1" class="form-control" placeholder="Price..." value="@Model.Price" />
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="CategoryName">
+            <span>Category</span>
+        </label>
+        <select asp-for="CategoryName" class="form-control">
+            @foreach(string categoryName in Model.CategoriesNames)
+            {
+                <option value="@categoryName">@categoryName</option>
+            }
+        </select>
+        <span asp-validation-for="CategoryName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="AisleNames">
+            <span>Aisle</span>
+        </label>
+        <select asp-for="AisleName" class="form-control">
+            @foreach (string aisleName in Model.AisleNames)
+            {
+                <option value="@aisleName">@aisleName</option>
+            }
+        </select>
+        <span asp-validation-for="AisleName" class="text-danger"></span>
+    </div>
     <br />
-    <input type="submit" class="form-control" value="Edit category" />
+    <input type="submit" class="form-control" value="Edit product" />
 </form>

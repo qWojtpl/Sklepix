@@ -74,7 +74,7 @@ namespace Sklepix.Controllers
         public ActionResult Create(AisleDto aisle)
         {
 
-            if(!isAisleCorrect(aisle))
+            if(!IsAisleCorrect(aisle))
             {
                 return View(aisle);
             }
@@ -154,7 +154,7 @@ namespace Sklepix.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(AisleDto aisle)
         {
-            if(!isAisleCorrect(aisle))
+            if(!IsAisleCorrect(aisle))
             {
                 return View(aisle);
             }
@@ -261,9 +261,18 @@ namespace Sklepix.Controllers
             }
         }
 
-        private bool isAisleCorrect(AisleDto aisle)
+        private bool IsAisleCorrect(AisleDto aisle)
         {
-            if(aisle.Name.Contains("<") || aisle.Name.Contains(">"))
+            List<AisleEntity> aisles = _context.Aisles.ToList();
+            foreach(AisleEntity e in aisles)
+            {
+                if(e.Name.Equals(aisle.Name))
+                {
+                    ModelState.AddModelError("Name", "Aisle with this name already exists.");
+                    return false;
+                }
+            }
+            if (aisle.Name.Contains("<") || aisle.Name.Contains(">"))
             {
                 ModelState.AddModelError("Name", "This field can't contain tag symbols");
                 return false;

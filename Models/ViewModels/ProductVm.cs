@@ -5,6 +5,7 @@ namespace Sklepix.Models.ViewModels
 {
     public class ProductVm
     {
+        [Display(Name = "ID")]
         public int Id { get; set; }
         [Display(Name = "Name")]
         public string Name { get; set; }
@@ -12,9 +13,9 @@ namespace Sklepix.Models.ViewModels
         [Display(Name = "Count")]
         public int Count { get; set; }
         [Display(Name = "Price")]
-        public double Price { get; set; }
-        public int CategoryId { get; set; }
-        public int AisleId { get; set; }
+        public int Price { get; set; }
+        public string? Category { get; set; }
+        public string? Aisle { get; set; }
         public int Row { get; set; }
 
     }

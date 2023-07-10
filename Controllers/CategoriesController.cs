@@ -53,7 +53,7 @@ namespace Sklepix.Controllers
         public ActionResult Create(CategoryDto category)
         {
 
-            if(!isCategoryCorrect(category))
+            if(!IsCategoryCorrect(category))
             {
                 return View(category);
             }
@@ -86,7 +86,7 @@ namespace Sklepix.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(CategoryDto category)
         {
-            if(!isCategoryCorrect(category))
+            if(!IsCategoryCorrect(category))
             {
                 return View(category);
             }
@@ -141,9 +141,18 @@ namespace Sklepix.Controllers
             }
         }
 
-        private bool isCategoryCorrect(CategoryDto category)
+        private bool IsCategoryCorrect(CategoryDto category)
         {
-            if(category.Name.Contains("<") || category.Name.Contains(">"))
+            List<CategoryEntity> categories = _context.Categories.ToList();
+            foreach (CategoryEntity e in categories)
+            {
+                if (e.Name.Equals(category.Name))
+                {
+                    ModelState.AddModelError("Name", "Category with this name already exists.");
+                    return false;
+                }
+            }
+            if (category.Name.Contains("<") || category.Name.Contains(">"))
             {
                 ModelState.AddModelError("Name", "This field can't contain tag symbols");
                 return false;
