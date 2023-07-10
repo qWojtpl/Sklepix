@@ -3,7 +3,6 @@ using Sklepix.Data.Entities;
 using Sklepix.Data;
 using Sklepix.Models.ViewModels;
 using Sklepix.Data.DataTransfers;
-using System.Security.Principal;
 
 namespace Sklepix.Controllers
 {
@@ -51,9 +50,12 @@ namespace Sklepix.Controllers
             {
                 foreach(AisleRowEntity row in rows)
                 {
-                    if(row.Aisle.Equals(aisle))
+                    if(row.Aisle != null)
                     {
-                        rowsForView.Add(row);
+                        if(row.Aisle.Equals(aisle))
+                        {
+                            rowsForView.Add(row);
+                        }
                     }
                 }
             }
@@ -110,6 +112,21 @@ namespace Sklepix.Controllers
                 if(aisle == null)
                 {
                     return View(aisleRow);
+                }
+                List<AisleRowEntity> rows = _context.AisleRows.ToList();
+                if(rows.Count > 0)
+                {
+                    foreach (AisleRowEntity row in rows)
+                    {
+                        if(row.Aisle != null) 
+                        {
+                            if(row.Aisle.Equals(aisle) && row.RowNumber == aisleRow.RowNumber)
+                            {
+                                ModelState.AddModelError("RowNumber", "This row already exists.");
+                                return View(aisleRow);
+                            }
+                        }
+                    }
                 }
                 _context.AisleRows.Add(new AisleRowEntity { RowNumber = aisleRow.RowNumber, Aisle = aisle } );
                 _context.SaveChanges();
@@ -181,6 +198,17 @@ namespace Sklepix.Controllers
                 AisleEntity? aisle = _context.Aisles.Find(id);
                 if(aisle != null)
                 {
+                    List<AisleRowEntity> rows = new List<AisleRowEntity>();
+                    if(rows.Count > 0)
+                    {
+                        foreach(AisleRowEntity row in rows)
+                        {
+                            if(row.Aisle.Equals(aisle))
+                            {
+                                _context.AisleRows.Remove(row);
+                            }
+                        }
+                    }
                     _context.Aisles.Remove(aisle);
                     _context.SaveChanges();
                 }
@@ -205,14 +233,25 @@ namespace Sklepix.Controllers
         {
             try
             {
-                AisleEntity? oldEntity = _context.Aisles.Find(aisleRow.AisleId);
-                if(oldEntity == null)
+                AisleEntity? aisle = _context.Aisles.Find(aisleRow.AisleId);
+                if(aisle == null)
                 {
                     return RedirectToAction("Index", "Aisles");                    
                 }
-                AisleEntity newEntity = new AisleEntity() { Id = oldEntity.Id, Name = oldEntity.Name, Description = oldEntity.Description };
-                _context.Aisles.Remove(oldEntity);
-                _context.Aisles.Add(newEntity);
+                List<AisleRowEntity> rows = _context.AisleRows.ToList();
+                if(rows.Count > 0)
+                {
+                    foreach(AisleRowEntity row in rows)
+                    {
+                        if(row.Aisle != null)
+                        {
+                            if(row.Aisle.Equals(aisle) && row.RowNumber == aisleRow.RowNumber)
+                            {
+                                _context.AisleRows.Remove(row);
+                            }
+                        }
+                    }
+                }
                 _context.SaveChanges();
                 return RedirectToAction("Details", "Aisles", new { id = aisleRow.AisleId });
             }
