@@ -5,9 +5,9 @@
     ViewData["Title"] = "Aisle details";
 }
 
-<button onclick="window.location.href='@Url.Action("Index", "Aisles")'" type="button" class="btn btn-success float-end">
+<a asp-action="Index" class="btn btn-success float-end">
     <span>Go back</span>
-</button>
+</a>
 
 <h3>@Model.Name</h3>
 <hr/>
@@ -21,9 +21,9 @@
 
 <hr />
 
-<button onclick="window.location.href='@Url.Action("CreateRow", "Aisles")/@Model.Id'" type="button" class="btn btn-success float-end">
-    <span>Add new row</span>
-</button>
+<a asp-action="CreateRow" asp-route-id="@Model.Id" class="btn btn-success float-end">
+    <span>Create new row</span>
+</a>
 
 <table class="table align-middle">
     <thead>
@@ -38,9 +38,9 @@
             <tr>
                 <td>@row.RowNumber</td>
                 <td>
-                    <button onclick="window.location.href='@Url.Action("DeleteRow", "Aisles")/@Model.Id/@row.RowNumber'" type="button" class="btn btn-danger">
-                        Delete
-                    </button>
+                    <a asp-action="DeleteRow" asp-route-id="@Model.Id" asp-route-secondId="@row.RowNumber" class="btn btn-danger">
+                        <span>Delete</span>
+                    </a>
                 </td>
             </tr>
         }

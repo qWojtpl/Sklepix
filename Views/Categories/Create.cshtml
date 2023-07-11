@@ -1,4 +1,4 @@
-﻿@using Sklepix.Data.DataTransfers
+﻿@using Sklepix.Models.DataTransferObjects
 @model CategoryDto
 @{
     ViewData["Title"] = "Create category";
@@ -11,9 +11,9 @@
     }
 }
 
-<button onclick="window.location.href='@Url.Action("Index", "Categories")'" type="button" class="btn btn-success float-end">
+<a asp-action="Index" class="btn btn-success float-end">
     <span>Go back</span>
-</button>
+</a>
 
 <form asp-action="Create" style="width:50%;height:50%;margin-left:25%;">
     <h2>Create category</h2>

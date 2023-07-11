@@ -1,23 +1,23 @@
 ﻿@using Sklepix.Models.ViewModels
-@model IEnumerable<AisleVm>
+@model AisleIndexVm
 @{
     ViewData["Title"] = "Aisles";
 }
 
-<button onclick="window.location.href='@Url.Action("Create", "Aisles")'" type="button" class="float-end btn btn-success">
+<a asp-action="Create" class="btn btn-success float-end">
     <span>Add new aisle</span>
-</button>
+</a>
 
 <table class="table align-middle">
     <thead>
         <tr>
-            <th scope="col">@Html.DisplayNameFor(model => model.Id)</th>
-            <th scope="col">@Html.DisplayNameFor(model => model.Name)</th>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
             <th scope="col">Actions</th>
         </tr>
     </thead>
     <tbody>
-        @foreach(AisleVm c in Model)
+        @foreach(AisleVm c in Model.Aisles)
         {
             <tr>
                 <td scope="row">
@@ -27,15 +27,15 @@
                     <a asp-action="Details" asp-route-id="@c.Id" class="text-reset text-decoration-none">@c.Name</a>
                 </td>
                 <td>
-                    <button onclick="window.location.href='@Url.Action("Details", "Aisles")/@c.Id'" type="button" class="btn btn-success">
-                        Details
-                    </button>
-                    <button onclick="window.location.href='@Url.Action("Edit", "Aisles")/@c.Id'" type="button" class="btn btn-info">
-                        Edit
-                    </button>
-                    <button onclick="window.location.href='@Url.Action("Delete", "Aisles")/@c.Id'" type="button" class="btn btn-danger">
-                        Delete
-                    </button>
+                    <a asp-action="Details" asp-route-id="@c.Id" class="btn btn-success">
+                        <span>Details</span>
+                    </a>
+                    <a asp-action="Edit" asp-route-id="@c.Id" class="btn btn-info">
+                        <span>Edit</span>
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@c.Id" class="btn btn-danger">
+                        <span>Delete</span>
+                    </a>
                 </td>
             </tr>
         }

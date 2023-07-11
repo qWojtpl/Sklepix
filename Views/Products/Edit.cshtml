@@ -1,12 +1,12 @@
-﻿@using Sklepix.Data.DataTransfers
-@model ProductDto
+﻿@using Sklepix.Models.ViewModels
+@model ProductEditVm
 @{
     ViewData["Title"] = "Edit product";
 }
 
-<button onclick="window.location.href='@Url.Action("Index", "Products")'" type="button" class="btn btn-success float-end">
+<a asp-action="Index" class="btn btn-success float-end">
     <span>Go back</span>
-</button>
+</a>
 
 <form asp-action="Edit" style="width:50%;height:50%;margin-left:25%;">
     <h2>Edit product: @Model.Name</h2>

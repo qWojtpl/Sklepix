@@ -2,7 +2,7 @@
 using Sklepix.Data.Entities;
 using Sklepix.Data;
 using Sklepix.Models.ViewModels;
-using Sklepix.Data.DataTransfers;
+using Sklepix.Models.DataTransferObjects;
 
 namespace Sklepix.Controllers
 {
@@ -31,9 +31,19 @@ namespace Sklepix.Controllers
                         rowsForView.Add(row);
                     }
                 }
-                views.Add(new AisleVm { Id = e.Id, Name = e.Name, Description = e.Description, Rows = rowsForView });
+                views.Add(new AisleVm 
+                { 
+                    Id = e.Id, 
+                    Name = e.Name, 
+                    Description = 
+                    e.Description, 
+                    Rows = rowsForView 
+                });
             }
-            return View(views);
+            return View(new AisleIndexVm
+            {
+                Aisles = views
+            });
         }
 
         // GET: AislesController/Details
@@ -59,7 +69,13 @@ namespace Sklepix.Controllers
                     }
                 }
             }
-            return View(new AisleVm() { Id = aisle.Id, Name = aisle.Name, Description = aisle.Description, Rows = rowsForView });
+            return View(new AisleVm() 
+            { 
+                Id = aisle.Id, 
+                Name = aisle.Name, 
+                Description = aisle.Description,
+                Rows = rowsForView 
+            });
         }
 
         // GET: AislesController/Create
@@ -80,7 +96,11 @@ namespace Sklepix.Controllers
             }
             try
             {
-                AisleEntity newAisle = new AisleEntity() { Name = aisle.Name, Description = aisle.Description };
+                AisleEntity newAisle = new AisleEntity() 
+                { 
+                    Name = aisle.Name, 
+                    Description = aisle.Description 
+                };
                 _context.Aisles.Add(newAisle);
                 _context.SaveChanges();
                 return RedirectToAction("Index", "Aisles");
@@ -99,7 +119,10 @@ namespace Sklepix.Controllers
             {
                 return RedirectToAction("Index", "Aisles");
             }
-            return View(new AisleRowDto() { AisleId = aisle.Id });
+            return View(new AisleRowDto() 
+            { 
+                AisleId = aisle.Id 
+            });
         }
 
         [HttpPost]
@@ -128,7 +151,11 @@ namespace Sklepix.Controllers
                         }
                     }
                 }
-                _context.AisleRows.Add(new AisleRowEntity { RowNumber = aisleRow.RowNumber, Aisle = aisle } );
+                _context.AisleRows.Add(new AisleRowEntity 
+                { 
+                    RowNumber = aisleRow.RowNumber, 
+                    Aisle = aisle 
+                });
                 _context.SaveChanges();
                 return RedirectToAction("Details", "Aisles", new { id = aisleRow.AisleId });
             }
@@ -146,7 +173,12 @@ namespace Sklepix.Controllers
             {
                 return RedirectToAction("Index", "Aisles");
             }
-            return View(new AisleDto { Id = aisle.Id, Name = aisle.Name, Description = aisle.Description });
+            return View(new AisleDto 
+            { 
+                Id = aisle.Id, 
+                Name = aisle.Name, 
+                Description = aisle.Description 
+            });
         }
 
         // POST: AislesController/Edit/5
@@ -165,7 +197,12 @@ namespace Sklepix.Controllers
                 {
                     return View(aisle);
                 }
-                AisleEntity newAisle = new AisleEntity() { Id = aisle.Id, Name = aisle.Name, Description = aisle.Description };
+                AisleEntity newAisle = new AisleEntity() 
+                { 
+                    Id = aisle.Id, 
+                    Name = aisle.Name, 
+                    Description = aisle.Description 
+                };
                 _context.Aisles.Remove(oldAisle);
                 _context.Aisles.Add(newAisle);
                 _context.SaveChanges();
@@ -223,7 +260,11 @@ namespace Sklepix.Controllers
         // GET: AislesController/DeleteRow/AisleId/Row
         public ActionResult DeleteRow(int id, int secondId)
         {
-            return View(new AisleRowDto { AisleId = id, RowNumber = secondId });
+            return View(new AisleRowDto 
+            { 
+                AisleId = id, 
+                RowNumber = secondId 
+            });
         }
 
         // GET: AislesController/DeleteRow/AisleId/Row

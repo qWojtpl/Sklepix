@@ -4,9 +4,9 @@
     ViewData["Title"] = "Product details";
 }
 
-<button onclick="window.location.href='@Url.Action("Index", "Products")'" type="button" class="btn btn-success float-end">
+<a asp-action="Index" class="btn btn-success float-end">
     <span>Go back</span>
-</button>
+</a>
 
 <h3>@Model.Name</h3>
 <hr/>
@@ -16,4 +16,22 @@
     <span class="form-control text-danger">No description found</span>
 } else {
     <span class="form-control">@Model.Description</span>
+}
+
+<br />
+
+@if(Model.Category == null)
+{
+    <span class="text-danger">No category found</span>
+} else {
+    <span>Category: @Model.Category</span>
+}
+
+<br />
+
+@if(Model.Aisle == null)
+{
+    <span class="text-danger">No aisle found</span>
+} else {
+    <span>Aisle: @Model.Aisle</span>
 }

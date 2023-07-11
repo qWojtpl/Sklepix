@@ -1,5 +1,5 @@
-﻿@using Sklepix.Data.DataTransfers
-@model ProductDto
+﻿@using Sklepix.Models.ViewModels
+@model ProductCreateVm
 @{
     ViewData["Title"] = "Create product";
     string name = "";
@@ -15,9 +15,9 @@
     }
 }
 
-<button onclick="window.location.href='@Url.Action("Index", "Products")'" type="button" class="btn btn-success float-end">
+<a asp-action="Create" class="btn btn-success float-end">
     <span>Go back</span>
-</button>
+</a>
 
 <form asp-action="Create" style="width:50%;height:50%;margin-left:25%;">
     <h2>Create product</h2>

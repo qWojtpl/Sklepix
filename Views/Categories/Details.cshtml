@@ -4,9 +4,9 @@
     ViewData["Title"] = "Category details";
 }
 
-<button onclick="window.location.href='@Url.Action("Index", "Categories")'" type="button" class="btn btn-success float-end">
+<a asp-action="Index" class="btn btn-success float-end">
     <span>Go back</span>
-</button>
+</a>
 
 <h3>@Model.Name</h3>
 <hr/>

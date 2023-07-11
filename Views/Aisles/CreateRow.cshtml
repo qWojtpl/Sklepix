@@ -1,12 +1,12 @@
-﻿@using Sklepix.Data.DataTransfers
+﻿@using Sklepix.Models.DataTransferObjects
 @model AisleRowDto
 @{
     ViewData["Title"] = "Create new aisle row";
 }
 
-<button onclick="window.location.href='@Url.Action("Details", "Aisles")/@Model.AisleId'" type="button" class="btn btn-success float-end">
+<a asp-action="Details" asp-route-id="@Model.AisleId" class="btn btn-success float-end">
     <span>Go back</span>
-</button>
+</a>
 
 <form asp-action="CreateRow" style="width:50%;height:50%;margin-left:25%;">
     <h2>Create aisle row</h2>

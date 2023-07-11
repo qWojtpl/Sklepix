@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Sklepix.Data;
-using Sklepix.Data.DataTransfers;
 using Sklepix.Data.Entities;
+using Sklepix.Models.DataTransferObjects;
 using Sklepix.Models.ViewModels;
 
 namespace Sklepix.Controllers
@@ -18,12 +18,12 @@ namespace Sklepix.Controllers
             this._context = context;
         }
 
-        // GET: ProductsController
+        // GET: Products
         public ActionResult Index()
         {
-            List<ProductEntity> entity = _context.Products.ToList();
+            List<ProductEntity> entities = _context.Products.ToList();
             List<ProductVm> views = new List<ProductVm>();
-            foreach(ProductEntity e in entity)
+            foreach(ProductEntity e in entities)
             {
                 string? categoryName = null;
                 string? aisleName = null;
@@ -41,7 +41,7 @@ namespace Sklepix.Controllers
             return View(views);
         }
 
-        // GET: ProductsController/Details/5
+        // GET: Products/Details/5
         public ActionResult Details(int id)
         {
             ProductEntity? product = _context.Products.Find(id);
@@ -62,13 +62,13 @@ namespace Sklepix.Controllers
             return View(new ProductVm() { Id = product.Id, Name = product.Name, Description = product.Description, Count = product.Count, Price = product.Price, Category = categoryName, Aisle = aisleName/*, Row = product.Row*/ });
         }
 
-        // GET: ProductsController/Create
+        // GET: Products/Create
         public ActionResult Create()
         {
             return View(GetProductDto());
         }
 
-        // POST: ProductsController/Create
+        // POST: Products/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(ProductDto product)
@@ -93,7 +93,7 @@ namespace Sklepix.Controllers
             }
         }
 
-        // GET: ProductsController/Edit/5
+        // GET: Products/Edit/5
         public ActionResult Edit(int id)
         {
             ProductEntity? product = _context.Products.Find(id);
@@ -101,7 +101,7 @@ namespace Sklepix.Controllers
             {
                 return RedirectToAction("Index", "Products");
             }
-            ProductDto data = GetProductDto();
+            ProductDto data = (ProductDto) GetProductDto();
             data.Id = product.Id;
             data.Name = product.Name;
             data.Description = product.Description;
@@ -110,7 +110,7 @@ namespace Sklepix.Controllers
             return View(data);
         }
 
-        // POST: ProductsController/Edit/5
+        // POST: Products/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(ProductDto product)
@@ -138,7 +138,7 @@ namespace Sklepix.Controllers
             }
         }
 
-        // GET: ProductsController/Delete/5
+        // GET: Products/Delete/5
         public ActionResult Delete(int id)
         {
             ProductEntity? product = _context.Products.Find(id);
@@ -155,7 +155,7 @@ namespace Sklepix.Controllers
             return View(data);
         }
 
-        // POST: ProductsController/Delete/5
+        // POST: Products/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)
@@ -176,8 +176,12 @@ namespace Sklepix.Controllers
             }
         }
 
-        private bool IsProductCorrect(ProductDto product)
+        private bool IsProductCorrect(ProductDto? product)
         {
+            if(product == null)
+            {
+                return false;
+            }
             if(product.Name == null)
             {
                 ModelState.AddModelError("Name", "This field is required");
@@ -233,10 +237,11 @@ namespace Sklepix.Controllers
                     rows.Add(aisle.Name, aisleRows);
                 }
             }
-            return new ProductDto { CategoriesNames = categoriesNames, AisleNames = aisleNames, AisleRows = rows };
+            return new ProductDto();
+            //return new ProductDto { CategoriesNames = categoriesNames, AisleNames = aisleNames, AisleRows = rows };
         }
 
-        private CategoryEntity? GetCategory(string name)
+        private CategoryEntity? GetCategory(string? name)
         {
             List<CategoryEntity> categories = _context.Categories.ToList();
             foreach(CategoryEntity category in categories)
@@ -249,7 +254,7 @@ namespace Sklepix.Controllers
             return null;
         }
 
-        private AisleEntity? GetAisle(string name)
+        private AisleEntity? GetAisle(string? name)
         {
             List<AisleEntity> aisles = _context.Aisles.ToList();
             foreach(AisleEntity aisle in aisles)

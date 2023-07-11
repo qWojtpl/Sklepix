@@ -1,12 +1,12 @@
-﻿@using Sklepix.Data.DataTransfers
+﻿@using Sklepix.Models.DataTransferObjects
 @model AisleDto
 @{
     ViewData["Title"] = "Edit aisle";
 }
 
-<button onclick="window.location.href='@Url.Action("Index", "Aisles")'" type="button" class="btn btn-success float-end">
+<a asp-action="Index" class="btn btn-success float-end">
     <span>Go back</span>
-</button>
+</a>
 
 <form asp-action="Edit" style="width:50%;height:50%;margin-left:25%;">
     <h2>Edit aisle: @Model.Name</h2>

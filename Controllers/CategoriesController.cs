@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Sklepix.Data;
-using Sklepix.Data.DataTransfers;
 using Sklepix.Data.Entities;
+using Sklepix.Models.DataTransferObjects;
 using Sklepix.Models.ViewModels;
 
 namespace Sklepix.Controllers

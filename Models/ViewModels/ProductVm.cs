@@ -11,9 +11,9 @@ namespace Sklepix.Models.ViewModels
         public string Name { get; set; }
         public string? Description { get; set; }
         [Display(Name = "Count")]
-        public int Count { get; set; }
+        public float Count { get; set; }
         [Display(Name = "Price")]
-        public int Price { get; set; }
+        public float Price { get; set; }
         public string? Category { get; set; }
         public string? Aisle { get; set; }
         public int Row { get; set; }
