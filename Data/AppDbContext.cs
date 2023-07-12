@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Sklepix.Data.Entities;
+using Sklepix.Data.Seeds;
 
 namespace Sklepix.Data
 {
@@ -15,6 +16,12 @@ namespace Sklepix.Data
         {
             optionsBuilder.UseSqlServer("Server=localhost;Database=Sklepix;Trusted_Connection=True;TrustServerCertificate=True;");
             base.OnConfiguring(optionsBuilder);
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            CategoriesSeeder.Seed(modelBuilder);
+            AislesSeeder.Seed(modelBuilder);
         }
 
     }
