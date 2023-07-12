@@ -4,6 +4,7 @@ using Sklepix.Data;
 using Sklepix.Data.Entities;
 using Sklepix.Models.DataTransferObjects;
 using Sklepix.Models.ViewModels;
+using Sklepix.Repositories;
 
 namespace Sklepix.Controllers
 {
@@ -11,17 +12,17 @@ namespace Sklepix.Controllers
     public class CategoriesController : Controller
     {
 
-        public readonly AppDbContext _context;
+        public readonly CategoriesRepository _repository;
 
-        public CategoriesController(AppDbContext context)
+        public CategoriesController(CategoriesRepository context)
         {
-            this._context = context;
+            this._repository = context;
         }
 
         // GET: CategoriesController
         public ActionResult Index()
         {
-            List<CategoryEntity> entity = _context.Categories.ToList();
+            List<CategoryEntity> entity = _repository.List();
             List<CategoryVm> views = new List<CategoryVm>();
             foreach(CategoryEntity e in entity)
             {
@@ -36,7 +37,7 @@ namespace Sklepix.Controllers
         // GET: CategoriesController/Details/5
         public ActionResult Details(int id)
         {
-            CategoryEntity? category = _context.Categories.Find(id);
+            CategoryEntity? category = _repository.One(id);
             if(category == null)
             {
                 return RedirectToAction("Index", "Categories");
@@ -62,9 +63,13 @@ namespace Sklepix.Controllers
             }
             try
             {
-                CategoryEntity newCategory = new CategoryEntity() { Name = category.Name, Description = category.Description };
-                _context.Categories.Add(newCategory);
-                _context.SaveChanges();
+                CategoryEntity newCategory = new CategoryEntity() 
+                { 
+                    Name = category.Name, 
+                    Description = category.Description 
+                };
+                _repository.Add(newCategory);
+                _repository.Save();
                 return RedirectToAction("Index", "Categories");
             }
             catch
@@ -76,12 +81,17 @@ namespace Sklepix.Controllers
         // GET: CategoriesController/Edit/5
         public ActionResult Edit(int id)
         {
-            CategoryEntity? category = _context.Categories.Find(id);
+            CategoryEntity? category = _repository.One(id);
             if (category == null)
             {
                 return RedirectToAction("Index", "Categories");
             }
-            return View(new CategoryDto { Id = category.Id, Name = category.Name, Description = category.Description });
+            return View(new CategoryDto 
+            { 
+                Id = category.Id, 
+                Name = category.Name, 
+                Description = category.Description 
+            });
         }
 
         // POST: CategoriesController/Edit/5
@@ -95,15 +105,20 @@ namespace Sklepix.Controllers
             }
             try
             {
-                CategoryEntity? oldCategory = _context.Categories.Find(category.Id);
+                CategoryEntity? oldCategory = _repository.One(category.Id);
                 if(oldCategory == null)
                 {
                     return View(category);
                 }
-                CategoryEntity newCategory = new CategoryEntity() { Id = category.Id, Name = category.Name, Description = category.Description };
-                _context.Categories.Remove(oldCategory);
-                _context.Categories.Add(newCategory);
-                _context.SaveChanges();
+                CategoryEntity newCategory = new CategoryEntity() 
+                { 
+                    Id = category.Id, 
+                    Name = category.Name, 
+                    Description = category.Description 
+                };
+                _repository.Delete(oldCategory);
+                _repository.Add(newCategory);
+                _repository.Save();
                 return RedirectToAction("Index", "Categories");
             }
             catch
@@ -115,12 +130,17 @@ namespace Sklepix.Controllers
         // GET: CategoriesController/Delete/5
         public ActionResult Delete(int id)
         {
-            CategoryEntity? category = _context.Categories.Find(id);
+            CategoryEntity? category = _repository.One(id);
             if(category == null)
             {
                 return RedirectToAction("Index", "Categories");
             }
-            return View(new CategoryVm { Id = category.Id, Name = category.Name, Description = category.Description });
+            return View(new CategoryVm 
+            { 
+                Id = category.Id, 
+                Name = category.Name, 
+                Description = category.Description 
+            });
         }
 
         // POST: CategoriesController/Delete/5
@@ -130,11 +150,11 @@ namespace Sklepix.Controllers
         {
             try
             {
-                CategoryEntity? category = _context.Categories.Find(categoryVm.Id);
+                CategoryEntity? category = _repository.One(categoryVm.Id);
                 if(category != null)
                 {
-                    _context.Categories.Remove(category);
-                    _context.SaveChanges();
+                    _repository.Delete(category);
+                    _repository.Save();
                 }
                 return RedirectToAction("Index", "Categories");
             }
@@ -147,7 +167,7 @@ namespace Sklepix.Controllers
 
         private bool IsCategoryCorrect(CategoryDto category)
         {
-            List<CategoryEntity> categories = _context.Categories.ToList();
+            List<CategoryEntity> categories = _repository.List();
             foreach(CategoryEntity e in categories)
             {
                 if(e.Name.Equals(category.Name) && e.Id != category.Id)
