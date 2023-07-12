@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Sklepix.Data.Entities;
-using Sklepix.Data;
 using Sklepix.Models.ViewModels;
 using Sklepix.Models.DataTransferObjects;
 using Sklepix.Repositories;
@@ -12,13 +11,13 @@ namespace Sklepix.Controllers
         public readonly AislesRepository _repository;
         public readonly AisleRowsRepository _rowRepository;
 
-        public AislesController(AislesRepository context, AisleRowsRepository rowRepository)
+        public AislesController(AislesRepository repository, AisleRowsRepository rowRepository)
         {
-            this._repository = context;
+            this._repository = repository;
             this._rowRepository = rowRepository;
         }
 
-        // GET: AislesController
+        // GET: Aisles
         public ActionResult Index()
         {
             List<AisleEntity> entities = _repository.List();
@@ -49,7 +48,7 @@ namespace Sklepix.Controllers
             });
         }
 
-        // GET: AislesController/Details
+        // GET: Aisles/Details
         public ActionResult Details(int id)
         {
             AisleEntity? aisle = _repository.One(id);
@@ -81,13 +80,13 @@ namespace Sklepix.Controllers
             });
         }
 
-        // GET: AislesController/Create
+        // GET: Aisles/Create
         public ActionResult Create()
         {
             return View();
         }
         
-        // POST: AislesController/Create
+        // POST: Aisles/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(AisleDto aisle)
@@ -114,7 +113,7 @@ namespace Sklepix.Controllers
             }
         }
 
-        // GET: AislesController/CreateRow/AisleID
+        // GET: Aisles/CreateRow/AisleID
         public ActionResult CreateRow(int id)
         {
             AisleEntity? aisle = _repository.One(id);
@@ -168,7 +167,7 @@ namespace Sklepix.Controllers
             }
         }
 
-        // GET: AislesController/Edit/5
+        // GET: Aisles/Edit/5
         public ActionResult Edit(int id)
         {
             AisleEntity? aisle = _repository.One(id);
@@ -184,7 +183,7 @@ namespace Sklepix.Controllers
             });
         }
 
-        // POST: AislesController/Edit/5
+        // POST: Aisles/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(AisleDto aisle)
@@ -211,7 +210,7 @@ namespace Sklepix.Controllers
             }
         }
 
-        // GET: AislesController/Delete/5
+        // GET: Aisles/Delete/5
         public ActionResult Delete(int id)
         {
             AisleEntity? aisle = _repository.One(id);
@@ -227,7 +226,7 @@ namespace Sklepix.Controllers
             });
         }
 
-        // POST: AislesController/Delete/5
+        // POST: Aisles/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(AisleVm aisleVm)
@@ -260,7 +259,7 @@ namespace Sklepix.Controllers
             }
         }
 
-        // GET: AislesController/DeleteRow/AisleId/Row
+        // GET: Aisles/DeleteRow/AisleId/Row
         public ActionResult DeleteRow(int id, int secondId)
         {
             return View(new AisleRowDto 
@@ -270,7 +269,7 @@ namespace Sklepix.Controllers
             });
         }
 
-        // GET: AislesController/DeleteRow/AisleId/Row
+        // GET: Aisles/DeleteRow/AisleId/Row
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteRow(AisleRowDto aisleRow)
@@ -291,9 +290,7 @@ namespace Sklepix.Controllers
                         {
                             if(row.Aisle.Equals(aisle) && row.RowNumber == aisleRow.RowNumber)
                             {
-                                Console.WriteLine("R");
                                 _rowRepository.Delete(row);
-                                Console.WriteLine("NE");
                             }
                         }
                     }

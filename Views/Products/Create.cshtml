@@ -4,8 +4,8 @@
     ViewData["Title"] = "Create product";
     string name = "";
     string description = "";
-    int count = 0;
-    int price = 0;
+    float count = 0;
+    float price = 0;
     if(Model != null)
     {
         name = (Model.Name == null) ? "" : Model.Name;
@@ -48,7 +48,7 @@
         <label asp-for="Price">
             <span>Price</span>
         </label>
-        <input asp-for="Price" type="number" step="1" class="form-control" placeholder="Price..." value="@price" />
+        <input asp-for="Price" type="number" step="0.01" class="form-control" placeholder="Price..." value="@price" />
         <span asp-validation-for="Price" class="text-danger"></span>
     </div>
     <div class="form-group">

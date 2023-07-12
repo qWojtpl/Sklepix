@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Sklepix.Data;
 using Sklepix.Data.Entities;
 using Sklepix.Models.DataTransferObjects;
 using Sklepix.Models.ViewModels;
+using Sklepix.Repositories;
 
 namespace Sklepix.Controllers
 {
@@ -12,17 +12,26 @@ namespace Sklepix.Controllers
     public class ProductsController : Controller
     {
 
-        public readonly AppDbContext _context;
+        public readonly ProductsRepository _repository;
+        public readonly CategoriesRepository _categoriesRepository;
+        public readonly AislesRepository _aislesRepository;
+        public readonly AisleRowsRepository _aisleRowsRepository;
 
-        public ProductsController(AppDbContext context)
+        public ProductsController(ProductsRepository repository, CategoriesRepository categoriesRepository, AislesRepository aislesRepository, AisleRowsRepository aisleRowsRepository)
         {
-            this._context = context;
+            this._repository = repository;
+            this._categoriesRepository = categoriesRepository;
+            this._aislesRepository = aislesRepository;
+            this._aisleRowsRepository = aisleRowsRepository; 
         }
 
         // GET: Products
         public ActionResult Index()
         {
-            List<ProductEntity> entities = _context.Products.Include(m => m.Category).Include(m => m.Aisle).ToList();
+            List<ProductEntity> entities = _repository.GetRaw().Products
+                .Include(m => m.Category)
+                .Include(m => m.Aisle)
+                .ToList();
             List<ProductVm> views = new List<ProductVm>();
             foreach(ProductEntity e in entities)
             {
@@ -48,7 +57,7 @@ namespace Sklepix.Controllers
         // GET: Products/Details/5
         public ActionResult Details(int id)
         {
-            ProductEntity? product = _context.Products
+            ProductEntity? product = _repository.GetRaw().Products
                 .Include(m => m.Category)
                 .Include(m => m.Aisle)
                 .Include(m => m.Row)
@@ -77,8 +86,8 @@ namespace Sklepix.Controllers
                 Id = product.Id, 
                 Name = product.Name, 
                 Description = product.Description, 
-                Count = product.Count, Price = 
-                product.Price, 
+                Count = product.Count, 
+                Price = product.Price, 
                 Category = categoryName, 
                 Aisle = aisleName, 
                 Row = row
@@ -122,8 +131,8 @@ namespace Sklepix.Controllers
                     Aisle = aisle,
                     Row = aisleRow
                 };
-                _context.Products.Add(newProduct);
-                _context.SaveChanges();
+                _repository.Add(newProduct);
+                _repository.Save();
                 return RedirectToAction("Index", "Products");
             }
             catch
@@ -135,40 +144,69 @@ namespace Sklepix.Controllers
         // GET: Products/Edit/5
         public ActionResult Edit(int id)
         {
-            ProductEntity? product = _context.Products.Find(id);
+            ProductEntity? product = _repository.GetRaw().Products
+                .Include(m => m.Category)
+                .Include(m => m.Aisle)
+                .Include(m => m.Row)
+                .FirstOrDefault(m => m.Id == id);
             if(product == null)
             {
                 return RedirectToAction("Index", "Products");
             }
-            ProductDto data = null;
-            data.Id = product.Id;
-            data.Name = product.Name;
-            data.Description = product.Description;
-            data.Price = product.Price;
-            data.Count = product.Count;
-            return View(data);
+            string? categoryName = null;
+            string? aisleName = null;
+            int row = -1;
+            if(product.Category != null)
+            {
+                categoryName = product.Category.Name;
+            }
+            if(product.Aisle != null)
+            {
+                aisleName = product.Aisle.Name;
+            }
+            if(product.Row != null)
+            {
+                row = product.Row.RowNumber;
+            }
+            return View(new ProductEditVm
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Description = product.Description,
+                Count = product.Count,
+                Price = product.Price,
+                CategoryName = categoryName,
+                AisleName = aisleName,
+                Row = row,
+                CategoriesNames = GetCategoriesNames(),
+                AisleNames = GetAisleNames(),
+                AisleRows = GetAisleRows()
+            });
         }
 
         // POST: Products/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(ProductDto product)
+        public ActionResult Edit(ProductEditVm product)
         {
-            //if(!IsProductCorrect(product))
-            //{
-            //    return View(product);
-            //}
+            if(!IsProductCorrect(product))
+            {
+                return View(product);
+            }
             try
             {
-                ProductEntity? oldProduct = _context.Products.Find(product.Id);
-                if(oldProduct == null)
-                {
-                    return View(product);
-                }
-                ProductEntity newProduct = new ProductEntity() { Id = product.Id, Name = product.Name, Description = product.Description, Price = product.Price, Count = product.Count, Aisle = GetAisle(product.AisleName), Category = GetCategory(product.CategoryName) };
-                _context.Products.Remove(oldProduct);
-                _context.Products.Add(newProduct);
-                _context.SaveChanges();
+                ProductEntity newProduct = new ProductEntity() 
+                { 
+                    Id = product.Id, 
+                    Name = product.Name, 
+                    Description = product.Description, 
+                    Price = product.Price, 
+                    Count = product.Count, 
+                    Aisle = GetAisle(product.AisleName), 
+                    Category = GetCategory(product.CategoryName) 
+                };
+                _repository.Edit(product.Id, newProduct);
+                _repository.Save();
                 return RedirectToAction("Index", "Products");
             }
             catch
@@ -180,17 +218,16 @@ namespace Sklepix.Controllers
         // GET: Products/Delete/5
         public ActionResult Delete(int id)
         {
-            ProductEntity? product = _context.Products.Find(id);
+            ProductEntity? product = _repository.One(id);
             if(product == null)
             {
                 return RedirectToAction("Index", "Products");
             }
-            ProductDto data = null;
-            data.Id = product.Id;
-            data.Name = product.Name;
-            data.Description = product.Description;
-            data.Price = product.Price;
-            data.Count = product.Count;
+            ProductDto data = new ProductDto
+            {
+                Id = id,
+                Name = product.Name
+            };
             return View(data);
         }
 
@@ -201,12 +238,8 @@ namespace Sklepix.Controllers
         {
             try
             {
-                ProductEntity? product = _context.Products.Find(id);
-                if(product != null)
-                {
-                    _context.Products.Remove(product);
-                    _context.SaveChanges();
-                }
+                _repository.Delete(id);
+                _repository.Save();
                 return RedirectToAction("Index", "Products");
             }
             catch
@@ -242,10 +275,37 @@ namespace Sklepix.Controllers
             return true;
         }
 
+        private bool IsProductCorrect(ProductEditVm? product)
+        {
+            if (product == null)
+            {
+                return false;
+            }
+            if (product.Name == null)
+            {
+                ModelState.AddModelError("Name", "This field is required");
+                return false;
+            }
+            if (product.Name.Contains("<") || product.Name.Contains(">"))
+            {
+                ModelState.AddModelError("Name", "This field can't contain tag symbols");
+                return false;
+            }
+            if (product.Description != null)
+            {
+                if (product.Description.Contains("<") || product.Description.Contains(">"))
+                {
+                    ModelState.AddModelError("Description", "This field can't contain tag symbols");
+                    return false;
+                }
+            }
+            return true;
+        }
+
         private List<string> GetCategoriesNames()
         {
             List<string> categoriesNames = new List<string>();
-            List<CategoryEntity> categories = _context.Categories.ToList();
+            List<CategoryEntity> categories = _categoriesRepository.List();
             if(categories.Count > 0)
             {
                 foreach(CategoryEntity entity in categories)
@@ -259,7 +319,7 @@ namespace Sklepix.Controllers
         private List<string> GetAisleNames()
         {
             List<string> aisleNames = new List<string>();
-            List<AisleEntity> aisles = _context.Aisles.ToList();
+            List<AisleEntity> aisles = _aislesRepository.List();
             foreach(AisleEntity aisle in aisles)
             {
                 aisleNames.Add(aisle.Name);
@@ -270,8 +330,8 @@ namespace Sklepix.Controllers
         private Dictionary<string, List<int>> GetAisleRows()
         {
             Dictionary<string, List<int>> rowsDictionary = new Dictionary<string, List<int>>();
-            List<AisleRowEntity> rows = _context.AisleRows.ToList();
-            List<AisleEntity> aisles = _context.Aisles.ToList();
+            List<AisleRowEntity> rows = _aisleRowsRepository.List();
+            List<AisleEntity> aisles = _aislesRepository.List();
             foreach(AisleEntity aisle in aisles) 
             {
                 if(rows.Count > 0)
@@ -295,7 +355,7 @@ namespace Sklepix.Controllers
 
         private AisleRowEntity? GetRow(AisleEntity aisle, int row)
         {
-            List<AisleRowEntity> rows = _context.AisleRows.ToList();
+            List<AisleRowEntity> rows = _aisleRowsRepository.List();
             if(rows.Count > 0)
             {
                 foreach(AisleRowEntity entity in rows)
@@ -314,7 +374,7 @@ namespace Sklepix.Controllers
 
         private CategoryEntity? GetCategory(string? name)
         {
-            List<CategoryEntity> categories = _context.Categories.ToList();
+            List<CategoryEntity> categories = _categoriesRepository.List();
             foreach(CategoryEntity category in categories)
             {
                 if(category.Name.Equals(name))
@@ -327,7 +387,7 @@ namespace Sklepix.Controllers
 
         private AisleEntity? GetAisle(string? name)
         {
-            List<AisleEntity> aisles = _context.Aisles.ToList();
+            List<AisleEntity> aisles = _aislesRepository.List();
             foreach(AisleEntity aisle in aisles)
             {
                 if(aisle.Name.Equals(name))

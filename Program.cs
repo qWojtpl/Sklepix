@@ -14,6 +14,7 @@ namespace Sklepix
             builder.Services.AddTransient<CategoriesRepository>();
             builder.Services.AddTransient<AislesRepository>();
             builder.Services.AddTransient<AisleRowsRepository>();
+            builder.Services.AddTransient<ProductsRepository>();
             builder.Services.AddDbContext<AppDbContext>();
 
             var app = builder.Build();

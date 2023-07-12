@@ -14,9 +14,9 @@ namespace Sklepix.Controllers
 
         public readonly CategoriesRepository _repository;
 
-        public CategoriesController(CategoriesRepository context)
+        public CategoriesController(CategoriesRepository repository)
         {
-            this._repository = context;
+            this._repository = repository;
         }
 
         // GET: CategoriesController
@@ -150,12 +150,8 @@ namespace Sklepix.Controllers
         {
             try
             {
-                CategoryEntity? category = _repository.One(categoryVm.Id);
-                if(category != null)
-                {
-                    _repository.Delete(category);
-                    _repository.Save();
-                }
+                _repository.Delete(categoryVm.Id);
+                _repository.Save();
                 return RedirectToAction("Index", "Categories");
             }
             catch
