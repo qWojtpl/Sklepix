@@ -67,7 +67,7 @@
         <label asp-for="AisleNames">
             <span>Aisle</span>
         </label>
-        <select asp-for="AisleName" class="form-control">
+        <select asp-for="AisleName" id="aisle-select" class="form-control">
             @foreach(string aisleName in Model.AisleNames)
             {
                 <option value="@aisleName">@aisleName</option>
@@ -75,6 +75,52 @@
         </select>
         <span asp-validation-for="AisleName" class="text-danger"></span>
     </div>
+    <div class="form-group">
+        <label asp-for="Row">
+            <span>Aisle row</span>
+        </label>
+        <select asp-for="Row" id="row-select" class="form-control">
+            
+        </select>
+        <span asp-validation-for="Row" class="text-danger"></span>
+    </div>
     <br />
     <input type="submit" class="form-control" value="Create product" />
 </form>
+
+<script>
+
+    let rowList = {};
+    @{
+        foreach(var row in Model.AisleRows)
+        {
+            string list = "[";
+            foreach(int v in row.Value)
+            {
+                list += v + ",";
+            }
+            list += "]";
+            @:rowList['@Html.Raw(@row.Key)'] = @list;
+        }
+    }
+
+    const aisleElement = document.getElementById("aisle-select");
+    const rowElement = document.getElementById("row-select");
+
+    function change() {
+        rowElement.innerHTML = "";
+        var str = "";
+        if (rowList[aisleElement.value].length > 0) {
+            for (var i = 0; i < rowList[aisleElement.value].length; i++) {
+                str += "<option value='" + rowList[aisleElement.value][i] + "'>" + rowList[aisleElement.value][i] + "</option>";
+            }
+            rowElement.innerHTML = str;
+        }
+    }
+
+    change();
+    aisleElement.addEventListener("change", () => {
+        change();
+    });
+
+</script>

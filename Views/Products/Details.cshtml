@@ -20,18 +20,32 @@
 
 <br />
 
+<span><b>Category: </b>
 @if(Model.Category == null)
 {
     <span class="text-danger">No category found</span>
 } else {
-    <span>Category: @Model.Category</span>
+    <span>@Model.Category</span>
 }
+</span>
 
 <br />
 
+<span><b>Aisle: </b>
 @if(Model.Aisle == null)
 {
     <span class="text-danger">No aisle found</span>
 } else {
-    <span>Aisle: @Model.Aisle</span>
+    <span>@Model.Aisle</span>
 }
+</span>
+
+<br />
+<span><b>Aisle row: </b>
+@if(Model.Row == -1)
+{
+    <span class="text-danger">No row found</span>
+} else {
+    <span>@Model.Row</span>
+}
+</span>

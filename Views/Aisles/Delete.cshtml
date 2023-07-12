@@ -11,6 +11,9 @@
     <h3>@Model.Name</h3>
     <br />
     <form asp-action="Delete">
+        <input asp-for="Id" type="hidden" value="@Model.Id" />
+        <input asp-for="Name" type="hidden" value="@Model.Name" />
+        <span asp-validation-for="Name" class="text-danger"></span><br />
         <button onclick="window.location.href='@Url.Action("Index", "Aisles")'" type="button" class="btn btn-success" style="margin-right: 2.5%; padding-left: 30px; padding-right: 30px;">
             No
         </button>

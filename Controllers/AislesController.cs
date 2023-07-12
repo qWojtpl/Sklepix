@@ -228,11 +228,11 @@ namespace Sklepix.Controllers
         // POST: AislesController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(AisleVm aisleVm)
         {
             try
             {
-                AisleEntity? aisle = _context.Aisles.Find(id);
+                AisleEntity? aisle = _context.Aisles.Find(aisleVm.Id);
                 if(aisle != null)
                 {
                     List<AisleRowEntity> rows = new List<AisleRowEntity>();
@@ -253,7 +253,8 @@ namespace Sklepix.Controllers
             }
             catch
             {
-                return RedirectToAction("Index", "Aisles");
+                ModelState.AddModelError("Name", "Some products are assigned to this aisle!");
+                return View(aisleVm);
             }
         }
 
@@ -288,7 +289,9 @@ namespace Sklepix.Controllers
                         {
                             if(row.Aisle.Equals(aisle) && row.RowNumber == aisleRow.RowNumber)
                             {
+                                Console.WriteLine("R");
                                 _context.AisleRows.Remove(row);
+                                Console.WriteLine("NE");
                             }
                         }
                     }
@@ -298,7 +301,8 @@ namespace Sklepix.Controllers
             }
             catch
             {
-                return RedirectToAction("Index", "Aisles");
+                ModelState.AddModelError("RowNumber", "Some products are assigned to this row!");
+                return View(aisleRow);
             }
         }
 
@@ -307,7 +311,7 @@ namespace Sklepix.Controllers
             List<AisleEntity> aisles = _context.Aisles.ToList();
             foreach(AisleEntity e in aisles)
             {
-                if(e.Name.Equals(aisle.Name))
+                if(e.Name.Equals(aisle.Name) && e.Id != aisle.Id)
                 {
                     ModelState.AddModelError("Name", "Aisle with this name already exists.");
                     return false;

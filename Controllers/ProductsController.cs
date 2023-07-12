@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Sklepix.Data;
 using Sklepix.Data.Entities;
 using Sklepix.Models.DataTransferObjects;
@@ -21,7 +22,7 @@ namespace Sklepix.Controllers
         // GET: Products
         public ActionResult Index()
         {
-            List<ProductEntity> entities = _context.Products.ToList();
+            List<ProductEntity> entities = _context.Products.Include(m => m.Category).Include(m => m.Aisle).ToList();
             List<ProductVm> views = new List<ProductVm>();
             foreach(ProductEntity e in entities)
             {
@@ -38,19 +39,27 @@ namespace Sklepix.Controllers
                 views.Add(new ProductVm { Id = e.Id, Name = e.Name, Description = e.Description, 
                     Count = e.Count, Price = e.Price, Aisle = aisleName, Category = categoryName/*, Row = e.Row*/ });
             }
-            return View(views);
+            return View(new ProductIndexVm
+            {
+                Products = views
+            });
         }
 
         // GET: Products/Details/5
         public ActionResult Details(int id)
         {
-            ProductEntity? product = _context.Products.Find(id);
+            ProductEntity? product = _context.Products
+                .Include(m => m.Category)
+                .Include(m => m.Aisle)
+                .Include(m => m.Row)
+                .FirstOrDefault(m => m.Id == id);
             if(product == null)
             {
                 return RedirectToAction("Index", "Products");
             }
             string? categoryName = null;
             string? aisleName = null;
+            int row = -1;
             if(product.Category != null)
             {
                 categoryName = product.Category.Name;
@@ -59,37 +68,67 @@ namespace Sklepix.Controllers
             {
                 aisleName = product.Aisle.Name;
             }
-            return View(new ProductVm() { Id = product.Id, Name = product.Name, Description = product.Description, Count = product.Count, Price = product.Price, Category = categoryName, Aisle = aisleName/*, Row = product.Row*/ });
+            if(product.Row != null)
+            {
+                row = product.Row.RowNumber;
+            }
+            return View(new ProductVm() 
+            { 
+                Id = product.Id, 
+                Name = product.Name, 
+                Description = product.Description, 
+                Count = product.Count, Price = 
+                product.Price, 
+                Category = categoryName, 
+                Aisle = aisleName, 
+                Row = row
+            });
         }
 
         // GET: Products/Create
         public ActionResult Create()
         {
-            return View(GetProductDto());
+            ProductCreateVm view = new ProductCreateVm()
+            {
+                CategoriesNames = GetCategoriesNames(),
+                AisleNames = GetAisleNames(),
+                AisleRows = GetAisleRows()
+            };
+            return View(view);
         }
 
         // POST: Products/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(ProductDto product)
+        public ActionResult Create(ProductCreateVm product)
         {
 
             if(!IsProductCorrect(product))
             {
-                return View(GetProductDto());
+                return View(product);
             }
             try
             {
                 CategoryEntity? category = GetCategory(product.CategoryName);
                 AisleEntity? aisle = GetAisle(product.AisleName);
-                ProductEntity newProduct = new ProductEntity() { Name = product.Name, Description = product.Description, Count = product.Count, Price = product.Price, Category = category, Aisle = aisle };
+                AisleRowEntity? aisleRow = GetRow(aisle, product.Row);
+                ProductEntity newProduct = new ProductEntity()
+                {
+                    Name = product.Name,
+                    Description = product.Description,
+                    Count = product.Count,
+                    Price = product.Price,
+                    Category = category,
+                    Aisle = aisle,
+                    Row = aisleRow
+                };
                 _context.Products.Add(newProduct);
                 _context.SaveChanges();
                 return RedirectToAction("Index", "Products");
             }
             catch
             {
-                return View(GetProductDto());
+                return View(product);
             }
         }
 
@@ -101,7 +140,7 @@ namespace Sklepix.Controllers
             {
                 return RedirectToAction("Index", "Products");
             }
-            ProductDto data = (ProductDto) GetProductDto();
+            ProductDto data = null;
             data.Id = product.Id;
             data.Name = product.Name;
             data.Description = product.Description;
@@ -115,10 +154,10 @@ namespace Sklepix.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(ProductDto product)
         {
-            if(!IsProductCorrect(product))
-            {
-                return View(product);
-            }
+            //if(!IsProductCorrect(product))
+            //{
+            //    return View(product);
+            //}
             try
             {
                 ProductEntity? oldProduct = _context.Products.Find(product.Id);
@@ -146,7 +185,7 @@ namespace Sklepix.Controllers
             {
                 return RedirectToAction("Index", "Products");
             }
-            ProductDto data = GetProductDto();
+            ProductDto data = null;
             data.Id = product.Id;
             data.Name = product.Name;
             data.Description = product.Description;
@@ -176,7 +215,7 @@ namespace Sklepix.Controllers
             }
         }
 
-        private bool IsProductCorrect(ProductDto? product)
+        private bool IsProductCorrect(ProductCreateVm? product)
         {
             if(product == null)
             {
@@ -203,11 +242,9 @@ namespace Sklepix.Controllers
             return true;
         }
 
-        private ProductDto GetProductDto()
+        private List<string> GetCategoriesNames()
         {
             List<string> categoriesNames = new List<string>();
-            List<string> aisleNames = new List<string>();
-            Dictionary<string, List<int>> rows = new Dictionary<string, List<int>>();
             List<CategoryEntity> categories = _context.Categories.ToList();
             if(categories.Count > 0)
             {
@@ -216,29 +253,63 @@ namespace Sklepix.Controllers
                     categoriesNames.Add(entity.Name);
                 }
             }
+            return categoriesNames;
+        }
+
+        private List<string> GetAisleNames()
+        {
+            List<string> aisleNames = new List<string>();
             List<AisleEntity> aisles = _context.Aisles.ToList();
-            List<AisleRowEntity> rowEntities = _context.AisleRows.ToList();
-            if (aisles.Count > 0)
+            foreach(AisleEntity aisle in aisles)
             {
-                foreach (AisleEntity aisle in aisles)
+                aisleNames.Add(aisle.Name);
+            }
+            return aisleNames;
+        }
+
+        private Dictionary<string, List<int>> GetAisleRows()
+        {
+            Dictionary<string, List<int>> rowsDictionary = new Dictionary<string, List<int>>();
+            List<AisleRowEntity> rows = _context.AisleRows.ToList();
+            List<AisleEntity> aisles = _context.Aisles.ToList();
+            foreach(AisleEntity aisle in aisles) 
+            {
+                if(rows.Count > 0)
                 {
-                    aisleNames.Add(aisle.Name);
-                    List<int> aisleRows = new List<int>();
-                    foreach (AisleRowEntity row in rowEntities)
+                    List<int> r = new List<int>();
+                    foreach (AisleRowEntity row in rows)
                     {
                         if(row.Aisle != null)
                         {
                             if(row.Aisle.Equals(aisle))
                             {
-                                aisleRows.Add(row.RowNumber);
+                                r.Add(row.RowNumber);
                             }
                         }
                     }
-                    rows.Add(aisle.Name, aisleRows);
+                    rowsDictionary[aisle.Name] = r;
                 }
             }
-            return new ProductDto();
-            //return new ProductDto { CategoriesNames = categoriesNames, AisleNames = aisleNames, AisleRows = rows };
+            return rowsDictionary; 
+        }
+
+        private AisleRowEntity? GetRow(AisleEntity aisle, int row)
+        {
+            List<AisleRowEntity> rows = _context.AisleRows.ToList();
+            if(rows.Count > 0)
+            {
+                foreach(AisleRowEntity entity in rows)
+                {
+                    if(entity.Aisle != null)
+                    {
+                        if(entity.Aisle.Equals(aisle) && entity.RowNumber == row)
+                        {
+                            return entity;
+                        }
+                    }
+                }
+            }
+            return null;
         }
 
         private CategoryEntity? GetCategory(string? name)

@@ -27,7 +27,10 @@ namespace Sklepix.Controllers
             {
                 views.Add(new CategoryVm { Id = e.Id, Name = e.Name, Description = e.Description });
             }
-            return View(views);
+            return View(new CategoryIndexVm()
+            {
+                Categories = views
+            });
         }
 
         // GET: CategoriesController/Details/5
@@ -117,17 +120,17 @@ namespace Sklepix.Controllers
             {
                 return RedirectToAction("Index", "Categories");
             }
-            return View(new CategoryDto { Id = category.Id, Name = category.Name, Description = category.Description });
+            return View(new CategoryVm { Id = category.Id, Name = category.Name, Description = category.Description });
         }
 
         // POST: CategoriesController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(CategoryVm categoryVm)
         {
             try
             {
-                CategoryEntity? category = _context.Categories.Find(id);
+                CategoryEntity? category = _context.Categories.Find(categoryVm.Id);
                 if(category != null)
                 {
                     _context.Categories.Remove(category);
@@ -137,16 +140,17 @@ namespace Sklepix.Controllers
             }
             catch
             {
-                return RedirectToAction("Index", "Categories");
+                ModelState.AddModelError("Name", "Some products are assigned to this category!");
+                return View(categoryVm);
             }
         }
 
         private bool IsCategoryCorrect(CategoryDto category)
         {
             List<CategoryEntity> categories = _context.Categories.ToList();
-            foreach (CategoryEntity e in categories)
+            foreach(CategoryEntity e in categories)
             {
-                if (e.Name.Equals(category.Name))
+                if(e.Name.Equals(category.Name) && e.Id != category.Id)
                 {
                     ModelState.AddModelError("Name", "Category with this name already exists.");
                     return false;

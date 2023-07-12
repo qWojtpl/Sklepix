@@ -12,6 +12,7 @@
     <form asp-action="DeleteRow">
         <input asp-for="AisleId" type="hidden" value="@Model.AisleId" />
         <input asp-for="RowNumber" type="hidden" value="@Model.RowNumber" />
+        <span asp-validation-for="RowNumber" class="text-danger"></span><br />
         <button onclick="window.location.href='@Url.Action("Details", "Aisles")/@Model.AisleId'" type="button" class="btn btn-success" style="margin-right: 2.5%; padding-left: 30px; padding-right: 30px;">
             No
         </button>
