@@ -28,10 +28,7 @@ namespace Sklepix.Controllers
         // GET: Products
         public ActionResult Index()
         {
-            List<ProductEntity> entities = _repository.GetRaw().Products
-                .Include(m => m.Category)
-                .Include(m => m.Aisle)
-                .ToList();
+            List<ProductEntity> entities = _repository.ListInclude();
             List<ProductVm> views = new List<ProductVm>();
             foreach(ProductEntity e in entities)
             {
@@ -57,11 +54,7 @@ namespace Sklepix.Controllers
         // GET: Products/Details/5
         public ActionResult Details(int id)
         {
-            ProductEntity? product = _repository.GetRaw().Products
-                .Include(m => m.Category)
-                .Include(m => m.Aisle)
-                .Include(m => m.Row)
-                .FirstOrDefault(m => m.Id == id);
+            ProductEntity? product = _repository.OneInclude(id);
             if(product == null)
             {
                 return RedirectToAction("Index", "Products");
@@ -144,11 +137,7 @@ namespace Sklepix.Controllers
         // GET: Products/Edit/5
         public ActionResult Edit(int id)
         {
-            ProductEntity? product = _repository.GetRaw().Products
-                .Include(m => m.Category)
-                .Include(m => m.Aisle)
-                .Include(m => m.Row)
-                .FirstOrDefault(m => m.Id == id);
+            ProductEntity? product = _repository.OneInclude(id);
             if(product == null)
             {
                 return RedirectToAction("Index", "Products");

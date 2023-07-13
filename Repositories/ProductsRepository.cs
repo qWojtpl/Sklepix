@@ -1,4 +1,5 @@
-﻿using Sklepix.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using Sklepix.Data;
 using Sklepix.Data.Entities;
 
 namespace Sklepix.Repositories
@@ -19,10 +20,27 @@ namespace Sklepix.Repositories
                 .ToList();
         }
 
+        public List<ProductEntity> ListInclude()
+        {
+            return _context.Products
+                .Include(m => m.Category)
+                .Include(m => m.Aisle)
+                .ToList();
+        }
+
         public ProductEntity? One(int id)
         {
             return _context.Products
                 .FirstOrDefault(n => n.Id == id);
+        }
+
+        public ProductEntity? OneInclude(int id)
+        {
+            return _context.Products
+                .Include(m => m.Category)
+                .Include(m => m.Aisle)
+                .Include(m => m.Row)
+                .FirstOrDefault(m => m.Id == id);
         }
 
         public void Add(ProductEntity model)
