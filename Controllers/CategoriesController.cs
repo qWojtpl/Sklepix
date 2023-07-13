@@ -13,20 +13,42 @@ namespace Sklepix.Controllers
     {
 
         public readonly CategoriesRepository _repository;
+        public readonly ProductsRepository _productsRepository;
 
-        public CategoriesController(CategoriesRepository repository)
+        public CategoriesController(CategoriesRepository repository, ProductsRepository productsRepository)
         {
             this._repository = repository;
+            this._productsRepository = productsRepository;
         }
 
-        // GET: CategoriesController
+        // GET: Categories
         public ActionResult Index()
         {
-            List<CategoryEntity> entity = _repository.List();
+            List<CategoryEntity> entities = _repository.List();
             List<CategoryVm> views = new List<CategoryVm>();
-            foreach(CategoryEntity e in entity)
+            List<CategoryEntity> usedEntities = new List<CategoryEntity>();
+            foreach(ProductEntity product in _productsRepository.ListInclude())
             {
-                views.Add(new CategoryVm { Id = e.Id, Name = e.Name, Description = e.Description });
+                foreach(CategoryEntity e in entities)
+                {
+                    if(e.Equals(product.Category))
+                    {
+                        if(!usedEntities.Contains(e))
+                        {
+                            usedEntities.Add(e);
+                        }
+                    }
+                }
+            }
+            foreach(CategoryEntity e in entities)
+            {
+                views.Add(new CategoryVm
+                {
+                    Id = e.Id,
+                    Name = e.Name,
+                    Description = e.Description,
+                    IsUsed = usedEntities.Contains(e)
+                });
             }
             return View(new CategoryIndexVm()
             {
@@ -34,7 +56,7 @@ namespace Sklepix.Controllers
             });
         }
 
-        // GET: CategoriesController/Details/5
+        // GET: Categories/Details/5
         public ActionResult Details(int id)
         {
             CategoryEntity? category = _repository.One(id);
@@ -45,13 +67,13 @@ namespace Sklepix.Controllers
             return View(new CategoryVm() { Id = category.Id, Name = category.Name, Description = category.Description });
         }
 
-        // GET: CategoriesController/Create
+        // GET: Categories/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: CategoriesController/Create
+        // POST: Categories/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(CategoryDto category)
@@ -78,7 +100,7 @@ namespace Sklepix.Controllers
             }
         }
 
-        // GET: CategoriesController/Edit/5
+        // GET: Categories/Edit/5
         public ActionResult Edit(int id)
         {
             CategoryEntity? category = _repository.One(id);
@@ -94,7 +116,7 @@ namespace Sklepix.Controllers
             });
         }
 
-        // POST: CategoriesController/Edit/5
+        // POST: Categories/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(CategoryDto category)
@@ -127,7 +149,7 @@ namespace Sklepix.Controllers
             }
         }
 
-        // GET: CategoriesController/Delete/5
+        // GET: Categories/Delete/5
         public ActionResult Delete(int id)
         {
             CategoryEntity? category = _repository.One(id);
@@ -143,7 +165,7 @@ namespace Sklepix.Controllers
             });
         }
 
-        // POST: CategoriesController/Delete/5
+        // POST: Categories/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(CategoryVm categoryVm)

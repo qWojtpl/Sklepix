@@ -10,11 +10,13 @@ namespace Sklepix.Controllers
     {
         public readonly AislesRepository _repository;
         public readonly AisleRowsRepository _rowRepository;
+        public readonly ProductsRepository _productsRepository;
 
-        public AislesController(AislesRepository repository, AisleRowsRepository rowRepository)
+        public AislesController(AislesRepository repository, AisleRowsRepository rowRepository, ProductsRepository productsRepository)
         {
             this._repository = repository;
             this._rowRepository = rowRepository;
+            this._productsRepository = productsRepository;
         }
 
         // GET: Aisles
@@ -22,11 +24,25 @@ namespace Sklepix.Controllers
         {
             List<AisleEntity> entities = _repository.List();
             List<AisleVm> views = new List<AisleVm>();
+            List<AisleEntity> usedEntities = new List<AisleEntity>();
+            foreach (ProductEntity product in _productsRepository.ListInclude())
+            {
+                foreach(AisleEntity e in entities)
+                {
+                    if(e.Equals(product.Aisle))
+                    {
+                        if(!usedEntities.Contains(e))
+                        {
+                            usedEntities.Add(e);
+                        }
+                    }
+                }
+            }
             foreach(AisleEntity e in entities)
             {
                 List<AisleRowEntity> rows = _rowRepository.List();
                 List<AisleRowEntity> rowsForView = new List<AisleRowEntity>();
-                foreach(AisleRowEntity row in rows) 
+                foreach (AisleRowEntity row in rows) 
                 {
                     if(row.Aisle.Equals(e))
                     {
@@ -39,6 +55,7 @@ namespace Sklepix.Controllers
                     Name = e.Name, 
                     Description = 
                     e.Description, 
+                    IsUsed = usedEntities.Contains(e),
                     Rows = rowsForView 
                 });
             }

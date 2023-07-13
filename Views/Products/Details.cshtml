@@ -4,19 +4,15 @@
     ViewData["Title"] = "Product details";
 }
 
-<a asp-action="Index" class="btn btn-success float-end">
+<a asp-action="Index" class="btn btn-primary">
     <span>Go back</span>
 </a>
 
+<br />
+<br />
+
 <h3>@Model.Name</h3>
 <hr/>
-
-@if(Model.Description == null)
-{
-    <span class="form-control text-danger">No description found</span>
-} else {
-    <span class="form-control">@Model.Description</span>
-}
 
 <br />
 
@@ -49,3 +45,13 @@
     <span>@Model.Row</span>
 }
 </span>
+
+<br />
+<br />
+
+@if(Model.Description == null)
+{
+    <span class="form-control text-danger">No description found</span>
+} else {
+    <span class="form-control">@Model.Description</span>
+}

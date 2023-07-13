@@ -11,9 +11,9 @@
 <table class="table align-middle">
     <thead>
         <tr>
-            <th scope="col">ID</th>
+            <th scope="col" style="width: 4px;">ID</th>
             <th scope="col">Name</th>
-            <th scope="col">Actions</th>
+            <th scope="col" style="width: 25%;">Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -33,9 +33,16 @@
                     <a asp-action="Edit" asp-route-id="@c.Id" class="btn btn-info">
                         <span>Edit</span>
                     </a>
-                    <a asp-action="Delete" asp-route-id="@c.Id" class="btn btn-danger">
-                        <span>Delete</span>
-                    </a>
+                    @if(!c.IsUsed)
+                    {
+                        <a asp-action="Delete" asp-route-id="@c.Id" class="btn btn-danger">
+                            <span>Delete</span>
+                        </a>
+                    } else {
+                        <a href="#" class="btn btn-danger disabled">
+                            <span>Delete</span>
+                        </a>
+                    }
                 </td>
             </tr>
         }

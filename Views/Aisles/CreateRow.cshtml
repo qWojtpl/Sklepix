@@ -4,7 +4,7 @@
     ViewData["Title"] = "Create new aisle row";
 }
 
-<a asp-action="Details" asp-route-id="@Model.AisleId" class="btn btn-success float-end">
+<a asp-action="Details" asp-route-id="@Model.AisleId" class="btn btn-primary float-start">
     <span>Go back</span>
 </a>
 
@@ -20,5 +20,5 @@
         <span asp-validation-for="RowNumber" class="text-danger"></span>
     </div>
     <br />
-    <input type="submit" class="form-control" value="Create new aisle row" />
+    <input type="submit" class="form-control btn btn-success" value="Create new aisle row" />
 </form>
