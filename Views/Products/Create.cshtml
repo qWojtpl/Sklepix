@@ -71,8 +71,8 @@
         </select>
         <span asp-validation-for="AisleName" class="text-danger"></span>
     </div>
-    <br />
-    <div class="form-group">
+    <div class="form-group" id="row-group">
+        <br />
         <label asp-for="Row">
             <span>Aisle row</span>
         </label>
@@ -111,15 +111,19 @@
 
     const aisleElement = document.getElementById("aisle-select");
     const rowElement = document.getElementById("row-select");
+    const rowGroup = document.getElementById("row-group");
 
     function change() {
         rowElement.innerHTML = "";
         var str = "";
-        if (rowList[aisleElement.value].length > 0) {
-            for (var i = 0; i < rowList[aisleElement.value].length; i++) {
+        rowGroup.style.display = "block";
+        if(rowList[aisleElement.value].length > 0) {
+            for(var i = 0; i < rowList[aisleElement.value].length; i++) {
                 str += "<option value='" + rowList[aisleElement.value][i] + "'>" + rowList[aisleElement.value][i] + "</option>";
             }
             rowElement.innerHTML = str;
+        } else {
+            rowGroup.style.display = "none";
         }
     }
 

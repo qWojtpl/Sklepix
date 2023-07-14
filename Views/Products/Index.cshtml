@@ -26,7 +26,7 @@
                     <a asp-action="Details" asp-route-id="@c.Id" class="text-reset text-decoration-none">@c.Id</a>
                 </td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@c.Id" class="text-reset text-decoration-none">@c.Name</a>
+                    <a asp-action="Details" asp-route-id="@c.Id" class="text-reset text-decoration-none"><b>@c.Name</b></a>
                 </td>
                 <td>
                     <a asp-action="Details" asp-route-id="@c.Id" class="text-reset text-decoration-none">@c.Count</a>
@@ -35,13 +35,13 @@
                     <a asp-action="Details" asp-route-id="@c.Id" class="text-reset text-decoration-none">@c.Price</a>
                 </td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@c.Id" class="btn btn-success">
+                    <a asp-action="Details" asp-route-id="@c.Id" class="btn btn-success btn-sm">
                         <span>Details</span>
                     </a>
-                    <a asp-action="Edit" asp-route-id="@c.Id" class="btn btn-info">
+                    <a asp-action="Edit" asp-route-id="@c.Id" class="btn btn-info btn-sm">
                         <span>Edit</span>
                     </a>
-                    <a asp-action="Delete" asp-route-id="@c.Id" class="btn btn-danger">
+                    <a asp-action="Delete" asp-route-id="@c.Id" class="btn btn-danger btn-sm">
                         <span>Delete</span>
                     </a>
                 </td>
