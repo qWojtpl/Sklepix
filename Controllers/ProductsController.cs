@@ -184,6 +184,8 @@ namespace Sklepix.Controllers
             }
             try
             {
+                AisleEntity? aisle = GetAisle(product.AisleName);
+                AisleRowEntity? aisleRow = GetRow(aisle, product.Row);
                 ProductEntity newProduct = new ProductEntity() 
                 { 
                     Id = product.Id, 
@@ -191,8 +193,9 @@ namespace Sklepix.Controllers
                     Description = product.Description, 
                     Price = product.Price, 
                     Count = product.Count, 
-                    Aisle = GetAisle(product.AisleName), 
-                    Category = GetCategory(product.CategoryName) 
+                    Aisle = aisle, 
+                    Category = GetCategory(product.CategoryName),
+                    Row = aisleRow
                 };
                 _repository.Edit(product.Id, newProduct);
                 _repository.Save();
@@ -342,8 +345,12 @@ namespace Sklepix.Controllers
             return rowsDictionary; 
         }
 
-        private AisleRowEntity? GetRow(AisleEntity aisle, int row)
+        private AisleRowEntity? GetRow(AisleEntity? aisle, int row)
         {
+            if(aisle == null)
+            {
+                return null;
+            }
             List<AisleRowEntity> rows = _aisleRowsRepository.List();
             if(rows.Count > 0)
             {

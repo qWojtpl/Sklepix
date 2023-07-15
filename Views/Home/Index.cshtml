@@ -1,8 +1,16 @@
-﻿@{
+﻿@using Sklepix.Models.ViewModels
+@model IndexVm
+@{
     ViewData["Title"] = "Home";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Statistics</h1>
+    <div style="width: 15%; margin-left: 42.5%;">
+        <ul>
+            <li>Categories: @Model.CategoriesCount</li>
+            <li>Aisles: @Model.AislesCount</li>
+            <li>Products: @Model.ProductsCount</li>
+        </ul>
+    </div>
 </div>

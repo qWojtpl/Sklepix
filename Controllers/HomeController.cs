@@ -1,12 +1,30 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Sklepix.Repositories;
+using Sklepix.Models.ViewModels;
 
 namespace Sklepix.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        public readonly CategoriesRepository _categoriesRepository;
+        public readonly AislesRepository _aislesRepository;
+        public readonly ProductsRepository _productsRepository;
+
+        public HomeController(CategoriesRepository categoriesRepository, AislesRepository aislesRepository, ProductsRepository productsRepository) 
         {
-            return View();
+            this._categoriesRepository = categoriesRepository;
+            this._aislesRepository = aislesRepository;
+            this._productsRepository = productsRepository;
+        }
+
+        public ActionResult Index()
+        {
+            return View(new IndexVm
+            {
+                CategoriesCount = _categoriesRepository.List().Count(),
+                AislesCount  = _aislesRepository.List().Count(),
+                ProductsCount = _productsRepository.List().Count()
+            });
         }
     }
 }
