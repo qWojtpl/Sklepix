@@ -1,5 +1,8 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Sklepix.Data;
 using Sklepix.Repositories;
+using SklepixIdentity.Data;
 
 namespace Sklepix
 {
@@ -17,6 +20,15 @@ namespace Sklepix
             builder.Services.AddTransient<ProductsRepository>();
             builder.Services.AddDbContext<AppDbContext>();
 
+            var connectionString = "Server=localhost;Database=Sklepix;Trusted_Connection=True;TrustServerCertificate=True;";
+            builder.Services.AddDbContext<IdentityContext>(options =>
+                options.UseSqlServer(connectionString));
+            builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<IdentityContext>();
+            builder.Services.AddRazorPages();
+
             var app = builder.Build();
 
             if (!app.Environment.IsDevelopment())
@@ -32,10 +44,13 @@ namespace Sklepix
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseAuthentication();
 
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}/{secondId?}");
+            
+            app.MapRazorPages();
 
             app.Run();
         }
