@@ -34,6 +34,7 @@ namespace Sklepix.Controllers
             {
                 string? categoryName = null;
                 string? aisleName = null;
+                int rowNumber = -1;
                 if(e.Category != null)
                 {
                     categoryName = e.Category.Name;
@@ -42,8 +43,22 @@ namespace Sklepix.Controllers
                 {
                     aisleName = e.Aisle.Name;
                 }
-                views.Add(new ProductVm { Id = e.Id, Name = e.Name, Description = e.Description, 
-                    Count = e.Count, Price = e.Price, Aisle = aisleName, Category = categoryName/*, Row = e.Row*/ });
+                if(e.Row != null)
+                {
+                    rowNumber = e.Row.RowNumber;
+                }
+                views.Add(new ProductVm 
+                { 
+                    Id = e.Id, 
+                    Name = e.Name, 
+                    Description = e.Description, 
+                    Count = e.Count, 
+                    Price = e.Price, 
+                    Margin = e.Margin,
+                    PotentialIncome = (e.Margin * e.Count) + e.Count * e.Price,
+                    Aisle = aisleName, 
+                    Category = categoryName, 
+                    Row = rowNumber });
             }
             return View(new ProductIndexVm
             {
@@ -81,6 +96,7 @@ namespace Sklepix.Controllers
                 Description = product.Description, 
                 Count = product.Count, 
                 Price = product.Price, 
+                Margin = product.Margin,
                 Category = categoryName, 
                 Aisle = aisleName, 
                 Row = row
@@ -120,6 +136,7 @@ namespace Sklepix.Controllers
                     Description = product.Description,
                     Count = product.Count,
                     Price = product.Price,
+                    Margin = product.Margin,
                     Category = category,
                     Aisle = aisle,
                     Row = aisleRow
@@ -164,13 +181,14 @@ namespace Sklepix.Controllers
                 Description = product.Description,
                 Count = product.Count,
                 Price = product.Price,
+                Margin = product.Margin,
                 CategoryName = categoryName,
                 AisleName = aisleName,
                 Row = row,
                 CategoriesNames = GetCategoriesNames(),
                 AisleNames = GetAisleNames(),
                 AisleRows = GetAisleRows()
-            });
+            });;
         }
 
         // POST: Products/Edit/5
@@ -193,6 +211,7 @@ namespace Sklepix.Controllers
                     Description = product.Description, 
                     Price = product.Price, 
                     Count = product.Count, 
+                    Margin = product.Margin,
                     Aisle = aisle, 
                     Category = GetCategory(product.CategoryName),
                     Row = aisleRow

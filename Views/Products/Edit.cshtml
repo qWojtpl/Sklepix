@@ -37,6 +37,14 @@
     </div>
     <br />
     <div class="form-group">
+        <label asp-for="Margin">
+            <span>Margin</span>
+        </label>
+        <input asp-for="Margin" type="number" step="0.01" class="form-control" placeholder="Margin..." value="@Model.Margin" />
+        <span asp-validation-for="Margin" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
         <label asp-for="CategoryName">
             <span>Category</span>
         </label>

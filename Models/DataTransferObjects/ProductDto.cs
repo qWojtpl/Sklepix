@@ -7,6 +7,7 @@
         public string? Description { get; set; }
         public float Count { get; set; }
         public float Price { get; set; }
+        public float Margin { get; set; }
         public string? CategoryName { get; set; }
         public string? AisleName { get; set; }
         public int Row { get; set; }

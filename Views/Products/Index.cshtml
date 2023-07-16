@@ -15,6 +15,8 @@
             <th scope="col">Name</th>
             <th scope="col">Count</th>
             <th scope="col">Price</th>
+            <th scope="col">Margin</th>
+            <th scope="col">Potential income</th>
             <th scope="col" style="width: 25%;">Actions</th>
         </tr>
     </thead>
@@ -33,6 +35,12 @@
                 </td>
                 <td>
                     <a asp-action="Details" asp-route-id="@c.Id" class="text-reset text-decoration-none">@c.Price</a>
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@c.Id" class="text-reset text-decoration-none">@c.Margin</a>
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@c.Id" class="text-reset text-decoration-none">@c.PotentialIncome</a>
                 </td>
                 <td>
                     <a asp-action="Details" asp-route-id="@c.Id" class="btn btn-success btn-sm">

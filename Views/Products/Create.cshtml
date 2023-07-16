@@ -6,12 +6,26 @@
     string description = "";
     float count = 0;
     float price = 0;
+    float margin = 0;
     if(Model != null)
     {
         name = (Model.Name == null) ? "" : Model.Name;
         description = (Model.Description == null) ? "" : Model.Description;
         count = Model.Count;
         price = Model.Price;
+        margin = Model.Margin;
+        if(Model.CategoriesNames == null)
+        {
+            Model.CategoriesNames = new();
+        }
+        if(Model.AisleNames == null)
+        {
+            Model.AisleNames = new();
+        }
+        if(Model.AisleRows == null)
+        {
+            Model.AisleRows = new();
+        }
     }
 }
 
@@ -44,6 +58,14 @@
         </label>
         <input asp-for="Price" type="number" step="0.01" class="form-control" placeholder="Price..." value="@price" />
         <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="Margin">
+            <span>Margin</span>
+        </label>
+        <input asp-for="Margin" type="number" step="0.01" class="form-control" placeholder="Margin..." value="@margin" />
+        <span asp-validation-for="Margin" class="text-danger"></span>
     </div>
     <br />
     <div class="form-group">
