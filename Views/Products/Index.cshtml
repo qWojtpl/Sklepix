@@ -18,6 +18,7 @@
             <th scope="col">Margin</th>
             <th scope="col">Price with margin</th>
             <th scope="col">Potential income</th>
+            <th scope="col">Potential income (without margin)</th>
             <th scope="col" style="width: 25%;">Actions</th>
         </tr>
     </thead>
@@ -38,13 +39,17 @@
                     <a asp-action="Details" asp-route-id="@c.Id" class="text-reset text-decoration-none">@c.Price</a>
                 </td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@c.Id" class="text-reset text-decoration-none">@c.Margin</a>
+                    <a asp-action="Details" asp-route-id="@c.Id" class="text-reset text-decoration-none">@c.Margin 
+                        <span class="text-muted">(@c.MarginPercent%)</span></a>
                 </td>
                 <td>
                     <a asp-action="Details" asp-route-id="@c.Id" class="text-reset text-decoration-none">@c.PriceWithMargin</a>
                 </td>
                 <td>
                     <a asp-action="Details" asp-route-id="@c.Id" class="text-reset text-decoration-none">@c.PotentialIncome</a>
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@c.Id" class="text-reset text-decoration-none">@c.PotentialIncomeWithoutMargin</a>
                 </td>
                 <td>
                     <a asp-action="Details" asp-route-id="@c.Id" class="btn btn-success btn-sm">

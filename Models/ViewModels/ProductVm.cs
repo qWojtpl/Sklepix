@@ -15,8 +15,10 @@ namespace Sklepix.Models.ViewModels
         [Display(Name = "Price")]
         public float Price { get; set; }
         public float Margin { get; set; }
+        public float MarginPercent { get; set; }
         public float PriceWithMargin { get; set; }
         public float PotentialIncome { get; set; }
+        public float PotentialIncomeWithoutMargin { get; set; }
         public string? Category { get; set; }
         public string? Aisle { get; set; }
         public int Row { get; set; }

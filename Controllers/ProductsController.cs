@@ -47,19 +47,22 @@ namespace Sklepix.Controllers
                 {
                     rowNumber = e.Row.RowNumber;
                 }
-                views.Add(new ProductVm 
-                { 
-                    Id = e.Id, 
-                    Name = e.Name, 
-                    Description = e.Description, 
-                    Count = e.Count, 
-                    Price = e.Price, 
+                views.Add(new ProductVm
+                {
+                    Id = e.Id,
+                    Name = e.Name,
+                    Description = e.Description,
+                    Count = e.Count,
+                    Price = e.Price,
                     Margin = e.Margin,
+                    MarginPercent = e.Margin / e.Price * 100,
                     PriceWithMargin = e.Margin + e.Price,
                     PotentialIncome = (e.Margin * e.Count) + e.Count * e.Price,
-                    Aisle = aisleName, 
-                    Category = categoryName, 
-                    Row = rowNumber });
+                    PotentialIncomeWithoutMargin = e.Count * e.Price,
+                    Aisle = aisleName,
+                    Category = categoryName,
+                    Row = rowNumber }
+                );
             }
             return View(new ProductIndexVm
             {
