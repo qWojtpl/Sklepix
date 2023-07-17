@@ -55,6 +55,7 @@ namespace Sklepix.Controllers
                     Count = e.Count, 
                     Price = e.Price, 
                     Margin = e.Margin,
+                    PriceWithMargin = e.Margin + e.Price,
                     PotentialIncome = (e.Margin * e.Count) + e.Count * e.Price,
                     Aisle = aisleName, 
                     Category = categoryName, 
