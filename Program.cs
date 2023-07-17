@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Sklepix.Data;
 using Sklepix.Repositories;
-using SklepixIdentity.Data;
 
 namespace Sklepix
 {
@@ -12,6 +11,14 @@ namespace Sklepix
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            // Add services to the container.
+            var connectionString = "Server=localhost;Database=Sklepix;Trusted_Connection=True;TrustServerCertificate=True;";
+            builder.Services.AddDbContext<IdentityContext>(options =>
+                options.UseSqlServer(connectionString));
+            builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<IdentityContext>();
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddTransient<CategoriesRepository>();
@@ -20,21 +27,17 @@ namespace Sklepix
             builder.Services.AddTransient<ProductsRepository>();
             builder.Services.AddDbContext<AppDbContext>();
 
-            var connectionString = "Server=localhost;Database=Sklepix;Trusted_Connection=True;TrustServerCertificate=True;";
-            builder.Services.AddDbContext<IdentityContext>(options =>
-                options.UseSqlServer(connectionString));
-            builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<IdentityContext>();
-            builder.Services.AddRazorPages();
-
             var app = builder.Build();
 
-            if (!app.Environment.IsDevelopment())
+            // Configure the HTTP request pipeline.
+            if (app.Environment.IsDevelopment())
             {
-                app.UseExceptionHandler("/Error");
-
+                app.UseMigrationsEndPoint();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
@@ -43,13 +46,13 @@ namespace Sklepix
 
             app.UseRouting();
 
-            app.UseAuthorization();
             app.UseAuthentication();
+            app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}/{secondId?}");
-            
+
             app.MapRazorPages();
 
             app.Run();
