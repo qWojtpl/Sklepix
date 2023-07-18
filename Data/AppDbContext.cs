@@ -1,20 +1,26 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Sklepix.Data.Entities;
 using Sklepix.Data.Seeds;
 
 namespace Sklepix.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext
     {
 
         public DbSet<ProductEntity> Products { get; set; }
         public DbSet<CategoryEntity> Categories { get; set; }
         public DbSet<AisleEntity> Aisles { get; set; }
         public DbSet<AisleRowEntity> AisleRows { get; set; }
+        public DbSet<UserEntity> Users { get; set; }
+
+        public AppDbContext(DbContextOptions<AppDbContext> options)
+            : base(options)
+        {
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=localhost;Database=Sklepix;Trusted_Connection=True;TrustServerCertificate=True;");
             base.OnConfiguring(optionsBuilder);
         }
 
@@ -22,6 +28,7 @@ namespace Sklepix.Data
         {
             CategoriesSeeder.Seed(modelBuilder);
             AislesSeeder.Seed(modelBuilder);
+            base.OnModelCreating(modelBuilder);
         }
 
     }
