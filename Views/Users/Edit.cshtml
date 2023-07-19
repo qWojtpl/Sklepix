@@ -9,24 +9,31 @@
 </a>
 
 <form asp-action="Edit" style="width:50%;height:50%;margin-left:25%;">
-    <h2>Edit category: @Model.Name</h2>
+    <h2>Edit user: @Model.Mail</h2>
     <br />
-    <input asp-for="Id" type="hidden" />
     <div class="form-group">
-        <label asp-for="Name">
-            <span>Category name</span>
+        <label asp-for="Mail">
+            <span>User's mail</span>
         </label>
-        <input asp-for="Name" type="text" class="form-control" placeholder="Category name..." />
-        <span asp-validation-for="Name" class="text-danger"></span>
+        <input asp-for="Mail" class="form-control" placeholder="User's mail..." />
+        <span asp-validation-for="Mail" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="Password">
+            <span>New password</span>
+        </label>
+        <input asp-for="Password" type="password" class="form-control" placeholder="New password..." />
+        <span asp-validation-for="Password" class="text-danger"></span>
     </div>
     <br />
     <div class="form-group">
         <label asp-for="Description">
-            <span>Category description</span>
+            <span>User's description</span>
         </label>
-        <textarea asp-for="Description" class="form-control" placeholder="Category description..." ></textarea>
+        <textarea asp-for="Description" class="form-control" placeholder="User's description..."></textarea>
         <span asp-validation-for="Description" class="text-danger"></span>
     </div>
     <br />
-    <input type="submit" class="form-control btn btn-success" value="Edit category" />
+    <input type="submit" class="form-control btn btn-success" value="Edit user" />
 </form>

@@ -17,9 +17,12 @@ namespace Sklepix
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddDefaultIdentity<UserEntity>(
-                options => options.SignIn.RequireConfirmedAccount = true
-            ).AddEntityFrameworkStores<AppDbContext>();
+            builder.Services.AddDefaultIdentity<UserEntity>(options => {
+                options.SignIn.RequireConfirmedAccount = false;
+                options.Password.RequireDigit = false;
+            })
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders();
 
             builder.Services.AddControllersWithViews();
 
@@ -28,7 +31,6 @@ namespace Sklepix
             builder.Services.AddTransient<AisleRowsRepository>();
             builder.Services.AddTransient<ProductsRepository>();
             builder.Services.AddTransient<UsersRepository>();
-            builder.Services.AddDbContext<AppDbContext>();
 
             var app = builder.Build();
 

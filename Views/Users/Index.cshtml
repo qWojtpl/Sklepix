@@ -11,8 +11,8 @@
 <table class="table align-middle">
     <thead>
         <tr>
-            <th scope="col" style="width: 4px;">ID</th>
-            <th scope="col">Name</th>
+            <th scope="col" style="width: 200px;">ID</th>
+            <th scope="col">E-mail</th>
             <th scope="col" style="width: 25%;">Actions</th>
         </tr>
     </thead>
@@ -24,25 +24,18 @@
                     <a asp-action="Details" asp-route-id="@user.Id" class="text-reset text-decoration-none">@user.Id</a>
                 </td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@c.Id" class="text-reset text-decoration-none"><b>@c.Name</b></a>
+                    <a asp-action="Details" asp-route-id="@user.Id" class="text-reset text-decoration-none"><b>@user.Mail</b></a>
                 </td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@c.Id" class="btn btn-success btn-sm">
+                    <a asp-action="Details" asp-route-id="@user.Id" class="btn btn-success btn-sm">
                         <span>Details</span>
                     </a>
-                    <a asp-action="Edit" asp-route-id="@c.Id" class="btn btn-info btn-sm">
+                    <a asp-action="Edit" asp-route-id="@user.Id" class="btn btn-info btn-sm">
                         <span>Edit</span>
                     </a>
-                    @if(!c.IsUsed)
-                    {
-                        <a asp-action="Delete" asp-route-id="@c.Id" class="btn btn-danger btn-sm">
-                            <span>Delete</span>
-                        </a>
-                    } else {
-                        <a href="#" class="btn btn-danger btn-sm disabled" style="pointer-events: auto;" data-toggle="tooltip" data-placement="top" data-bs-title="This category is in use by some products.">
-                            <span>Delete</span>
-                        </a>
-                    }
+                    <a asp-action="Delete" asp-route-id="@user.Id" class="btn btn-danger btn-sm">
+                        <span>Delete</span>
+                    </a>
                 </td>
             </tr>
         }

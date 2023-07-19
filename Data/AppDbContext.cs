@@ -5,7 +5,7 @@ using Sklepix.Data.Seeds;
 
 namespace Sklepix.Data
 {
-    public class AppDbContext : IdentityDbContext
+    public class AppDbContext : IdentityDbContext<UserEntity>
     {
 
         public DbSet<ProductEntity> Products { get; set; }
@@ -30,6 +30,6 @@ namespace Sklepix.Data
             AislesSeeder.Seed(modelBuilder);
             base.OnModelCreating(modelBuilder);
         }
-
+        
     }
 }

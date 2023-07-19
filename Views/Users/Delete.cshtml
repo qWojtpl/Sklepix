@@ -5,15 +5,15 @@
 }
 
 <div style="text-align: center;">
-    <h1>Are you sure you want to delete this category?</h1>
+    <h1>Are you sure you want to delete this user?</h1>
     <hr />
-    <h3>@Model.Name</h3>
+    <h3>@Model.Mail</h3>
     <br />
     <form asp-action="Delete">
         <input asp-for="Id" type="hidden" value="@Model.Id" />
-        <input asp-for="Name" type="hidden" value="@Model.Name" />
-        <span asp-validation-for="Name" class="text-danger"></span><br />
-        <button onclick="window.location.href='@Url.Action("Index", "Categories")'" type="button" class="btn btn-success" style="margin-right: 2.5%; padding-left: 30px; padding-right: 30px;">
+        <input asp-for="Mail" type="hidden" value="@Model.Mail" />
+        <span asp-validation-for="Mail" class="text-danger"></span><br />
+        <button onclick="window.location.href='@Url.Action("Index", "Users")'" type="button" class="btn btn-success" style="margin-right: 2.5%; padding-left: 30px; padding-right: 30px;">
             No
         </button>
         <button type="submit" class="btn btn-danger" style="margin-left: 2.5%; padding-left: 30px; padding-right: 30px;">Yes</button>

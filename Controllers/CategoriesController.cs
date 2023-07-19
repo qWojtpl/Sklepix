@@ -66,7 +66,12 @@ namespace Sklepix.Controllers
             {
                 return RedirectToAction("Index", "Categories");
             }
-            return View(new CategoryVm() { Id = category.Id, Name = category.Name, Description = category.Description });
+            return View(new CategoryVm() 
+            { 
+                Id = category.Id, 
+                Name = category.Name, 
+                Description = category.Description 
+            });
         }
 
         // GET: Categories/Create
@@ -129,19 +134,13 @@ namespace Sklepix.Controllers
             }
             try
             {
-                CategoryEntity? oldCategory = _repository.One(category.Id);
-                if(oldCategory == null)
-                {
-                    return View(category);
-                }
                 CategoryEntity newCategory = new CategoryEntity() 
                 { 
                     Id = category.Id, 
                     Name = category.Name, 
                     Description = category.Description 
                 };
-                _repository.Delete(oldCategory);
-                _repository.Add(newCategory);
+                _repository.Edit(category.Id, newCategory);
                 _repository.Save();
                 return RedirectToAction("Index", "Categories");
             }
