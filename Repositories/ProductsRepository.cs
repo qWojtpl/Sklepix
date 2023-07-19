@@ -57,7 +57,7 @@ namespace Sklepix.Repositories
 
         public bool Delete(int id)
         {
-            ProductEntity? entity = _context.Products.FirstOrDefault(n => n.Id == id);
+            ProductEntity? entity = One(id);
             if(entity == null)
             {
                 return false;

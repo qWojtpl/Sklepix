@@ -1,0 +1,21 @@
+﻿@using Sklepix.Models.ViewModels
+@model UserVm
+@{
+    ViewData["Title"] = "Delete user";
+}
+
+<div style="text-align: center;">
+    <h1>Are you sure you want to delete this category?</h1>
+    <hr />
+    <h3>@Model.Name</h3>
+    <br />
+    <form asp-action="Delete">
+        <input asp-for="Id" type="hidden" value="@Model.Id" />
+        <input asp-for="Name" type="hidden" value="@Model.Name" />
+        <span asp-validation-for="Name" class="text-danger"></span><br />
+        <button onclick="window.location.href='@Url.Action("Index", "Categories")'" type="button" class="btn btn-success" style="margin-right: 2.5%; padding-left: 30px; padding-right: 30px;">
+            No
+        </button>
+        <button type="submit" class="btn btn-danger" style="margin-left: 2.5%; padding-left: 30px; padding-right: 30px;">Yes</button>
+    </form>
+</div>

@@ -1,0 +1,50 @@
+﻿@using Sklepix.Models.ViewModels
+@model UserIndexVm
+@{
+    ViewData["Title"] = "Users";
+}
+
+<a asp-action="Create" class="btn btn-secondary float-end">
+    <span>Add user</span>
+</a>
+
+<table class="table align-middle">
+    <thead>
+        <tr>
+            <th scope="col" style="width: 4px;">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col" style="width: 25%;">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(UserVm user in Model.Users)
+        {
+            <tr>
+                <td scope="row">
+                    <a asp-action="Details" asp-route-id="@user.Id" class="text-reset text-decoration-none">@user.Id</a>
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@c.Id" class="text-reset text-decoration-none"><b>@c.Name</b></a>
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@c.Id" class="btn btn-success btn-sm">
+                        <span>Details</span>
+                    </a>
+                    <a asp-action="Edit" asp-route-id="@c.Id" class="btn btn-info btn-sm">
+                        <span>Edit</span>
+                    </a>
+                    @if(!c.IsUsed)
+                    {
+                        <a asp-action="Delete" asp-route-id="@c.Id" class="btn btn-danger btn-sm">
+                            <span>Delete</span>
+                        </a>
+                    } else {
+                        <a href="#" class="btn btn-danger btn-sm disabled" style="pointer-events: auto;" data-toggle="tooltip" data-placement="top" data-bs-title="This category is in use by some products.">
+                            <span>Delete</span>
+                        </a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

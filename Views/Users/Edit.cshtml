@@ -1,0 +1,32 @@
+﻿@using Sklepix.Models.DataTransferObjects
+@model UserDto
+@{
+    ViewData["Title"] = "Edit category";
+}
+
+<a asp-action="Index" class="btn btn-primary float-start">
+    <span>Go back</span>
+</a>
+
+<form asp-action="Edit" style="width:50%;height:50%;margin-left:25%;">
+    <h2>Edit category: @Model.Name</h2>
+    <br />
+    <input asp-for="Id" type="hidden" />
+    <div class="form-group">
+        <label asp-for="Name">
+            <span>Category name</span>
+        </label>
+        <input asp-for="Name" type="text" class="form-control" placeholder="Category name..." />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="Description">
+            <span>Category description</span>
+        </label>
+        <textarea asp-for="Description" class="form-control" placeholder="Category description..." ></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <br />
+    <input type="submit" class="form-control btn btn-success" value="Edit category" />
+</form>

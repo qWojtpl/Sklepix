@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Sklepix.Data;
+using Sklepix.Data.Entities;
 using Sklepix.Repositories;
 
 namespace Sklepix
@@ -16,14 +17,17 @@ namespace Sklepix
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<AppDbContext>();
+            builder.Services.AddDefaultIdentity<UserEntity>(
+                options => options.SignIn.RequireConfirmedAccount = true
+            ).AddEntityFrameworkStores<AppDbContext>();
+
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddTransient<CategoriesRepository>();
             builder.Services.AddTransient<AislesRepository>();
             builder.Services.AddTransient<AisleRowsRepository>();
             builder.Services.AddTransient<ProductsRepository>();
+            builder.Services.AddTransient<UsersRepository>();
             builder.Services.AddDbContext<AppDbContext>();
 
             var app = builder.Build();

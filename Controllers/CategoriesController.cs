@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Sklepix.Data;
 using Sklepix.Data.Entities;
@@ -9,6 +10,7 @@ using Sklepix.Repositories;
 namespace Sklepix.Controllers
 {
 
+    [Authorize]
     public class CategoriesController : Controller
     {
 

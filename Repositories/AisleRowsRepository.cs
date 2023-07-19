@@ -39,7 +39,7 @@ namespace Sklepix.Repositories
 
         public bool Delete(int id)
         {
-            AisleRowEntity? entity = _context.AisleRows.FirstOrDefault(n => n.Id == id);
+            AisleRowEntity? entity = One(id);
             if(entity == null)
             {
                 return false;

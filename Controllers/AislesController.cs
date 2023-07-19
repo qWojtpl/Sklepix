@@ -3,9 +3,11 @@ using Sklepix.Data.Entities;
 using Sklepix.Models.ViewModels;
 using Sklepix.Models.DataTransferObjects;
 using Sklepix.Repositories;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Sklepix.Controllers
 {
+    [Authorize]
     public class AislesController : Controller
     {
         public readonly AislesRepository _repository;

@@ -3,34 +3,34 @@ using Sklepix.Data.Entities;
 
 namespace Sklepix.Repositories
 {
-    public class CategoriesRepository : ICategoriesRepository
+    public class UsersRepository : IUsersRepository
     {
         private readonly AppDbContext _context;
 
-        public CategoriesRepository(AppDbContext appDbContext)
+        public UsersRepository(AppDbContext appDbContext)
         {
             _context = appDbContext;
         }
 
-        public List<CategoryEntity> List()
+        public List<UserEntity> List()
         {
-            return _context.Categories
+            return _context.Users
                 .Select(n => n)
                 .ToList();
         }
 
-        public CategoryEntity? One(int id)
+        public UserEntity? One(int id)
         {
-            return _context.Categories
+            return _context.Users
                 .FirstOrDefault(n => n.Id == id);
         }
 
-        public void Add(CategoryEntity model)
+        public void Add(UserEntity model)
         {
-            _context.Categories.Add(model);
+            _context.Users.Add(model);
         }
 
-        public void Edit(int id, CategoryEntity model)
+        public void Edit(int id, UserEntity model)
         {
             model.Id = id;
             Delete(id);
@@ -39,18 +39,18 @@ namespace Sklepix.Repositories
 
         public bool Delete(int id)
         {
-            CategoryEntity? entity = One(id);
+            UserEntity? entity = One(id);
             if(entity == null)
             {
                 return false;
             }
-            _context.Categories.Remove(entity);
+            _context.Users.Remove(entity);
             return true;
         }
 
-        public bool Delete(CategoryEntity model)
+        public bool Delete(UserEntity model)
         {
-            _context.Categories.Remove(model);
+            _context.Users.Remove(model);
             return true;
         }
 
