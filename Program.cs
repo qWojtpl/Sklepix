@@ -2,12 +2,17 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Sklepix.Data;
 using Sklepix.Data.Entities;
+using Sklepix.Data.Seeds;
 using Sklepix.Repositories;
 
 namespace Sklepix
 {
+
     public class Program
     {
+
+        public static WebApplication AppInstance;
+
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -33,6 +38,9 @@ namespace Sklepix
             builder.Services.AddTransient<UsersRepository>();
 
             var app = builder.Build();
+
+            var scope = app.Services.CreateScope();
+            Task.Run(async () => await UsersSeeder.Seed(scope.ServiceProvider.GetRequiredService<UserManager<UserEntity>>()));
 
             if (app.Environment.IsDevelopment())
             {

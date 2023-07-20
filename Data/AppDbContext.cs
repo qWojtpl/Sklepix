@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Sklepix.Data.Entities;
 using Sklepix.Data.Seeds;
 
@@ -17,6 +19,7 @@ namespace Sklepix.Data
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
         {
+
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Sklepix.Data;
 using Sklepix.Data.Entities;
 
@@ -19,7 +20,6 @@ namespace Sklepix.Repositories
         public List<UserEntity> List()
         {
             return _context.Users
-                .Select(n => n)
                 .ToList();
         }
 

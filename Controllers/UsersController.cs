@@ -31,7 +31,8 @@ namespace Sklepix.Controllers
                 {
                     Id = entity.Id,
                     Mail = entity.Email,
-                    Description = entity.Description
+                    Description = entity.Description,
+                    Type = entity.Type
                 });
             }
             return View(new UserIndexVm

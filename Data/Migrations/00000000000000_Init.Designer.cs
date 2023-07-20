@@ -12,7 +12,7 @@ using Sklepix.Data;
 namespace SklepixIdentity.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230719154426_Init")]
+    [Migration("20230720070617_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -356,6 +356,9 @@ namespace SklepixIdentity.Data.Migrations
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
