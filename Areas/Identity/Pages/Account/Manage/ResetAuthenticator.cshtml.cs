@@ -8,18 +8,19 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using Sklepix.Data.Entities;
 
 namespace SklepixIdentity.Areas.Identity.Pages.Account.Manage
 {
     public class ResetAuthenticatorModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<UserEntity> _userManager;
+        private readonly SignInManager<UserEntity> _signInManager;
         private readonly ILogger<ResetAuthenticatorModel> _logger;
 
         public ResetAuthenticatorModel(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager,
+            UserManager<UserEntity> userManager,
+            SignInManager<UserEntity> signInManager,
             ILogger<ResetAuthenticatorModel> logger)
         {
             _userManager = userManager;

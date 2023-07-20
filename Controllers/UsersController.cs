@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Sklepix.Data.Entities;
@@ -8,6 +9,7 @@ using Sklepix.Repositories;
 
 namespace Sklepix.Controllers
 {
+    [Authorize]
     public class UsersController : Controller
     {
 
@@ -98,11 +100,15 @@ namespace Sklepix.Controllers
             {
                 return RedirectToAction("Index", "Users");
             }
+            if (user.Type == 1)
+            {
+                return View(new UserDto());
+            }
             return View(new UserDto
             {
                 Id = user.Id,
                 Mail = user.Email,
-                Description = user.Description
+                Description = user.Description,
             });
         }
 
@@ -145,6 +151,10 @@ namespace Sklepix.Controllers
             if (user == null)
             {
                 return RedirectToAction("Index", "Users");
+            }
+            if(user.Type == 1)
+            {
+                return View(new UserVm());
             }
             return View(new UserVm
             {

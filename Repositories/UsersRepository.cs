@@ -37,7 +37,11 @@ namespace Sklepix.Repositories
 
         public async Task<bool> Edit(string id, UserEntity model, string? password)
         {
-            if(password != null)
+            if (!CanManage(id))
+            {
+                return false;
+            }
+            if (password != null)
             {
                 var token = await _userManager.GeneratePasswordResetTokenAsync(model);
                 await _userManager.ResetPasswordAsync(model, token, password);
@@ -49,6 +53,10 @@ namespace Sklepix.Repositories
 
         public async Task<bool> Delete(string id)
         {
+            if (!CanManage(id))
+            {
+                return false;
+            }
             UserEntity? entity = One(id);
             if(entity == null)
             {
@@ -60,6 +68,10 @@ namespace Sklepix.Repositories
 
         public async Task<bool> Delete(UserEntity model)
         {
+            if(!CanManage(model.Id))
+            {
+                return false;
+            }
             await _userManager.DeleteAsync(model);
             return true;
         }
@@ -67,6 +79,20 @@ namespace Sklepix.Repositories
         public void Save()
         {
             _context.SaveChanges();
+        }
+
+        public bool CanManage(string id)
+        {
+            UserEntity? entity = One(id);
+            if (entity == null)
+            {
+                return false;
+            }
+            if (entity.Type == 1)
+            {
+                return false;
+            }
+            return true;
         }
 
     }

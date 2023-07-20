@@ -11,5 +11,6 @@ namespace Sklepix.Repositories
         Task<bool> Delete(string id);
         Task<bool> Delete(UserEntity model);
         void Save();
+        bool CanManage(string id);
     }
 }
