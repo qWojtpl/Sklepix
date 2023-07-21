@@ -28,6 +28,7 @@ namespace Sklepix.Controllers
         }
 
         // GET: Products
+        [Authorize(Roles = "ProductView")]
         public ActionResult Index()
         {
             List<ProductEntity> entities = _repository.ListInclude();
@@ -73,6 +74,7 @@ namespace Sklepix.Controllers
         }
 
         // GET: Products/Details/5
+        [Authorize(Roles = "ProductView")]
         public ActionResult Details(int id)
         {
             ProductEntity? product = _repository.OneInclude(id);
@@ -110,6 +112,7 @@ namespace Sklepix.Controllers
         }
 
         // GET: Products/Create
+        [Authorize(Roles = "ProductAdd")]
         public ActionResult Create()
         {
             ProductCreateVm view = new ProductCreateVm()
@@ -124,6 +127,7 @@ namespace Sklepix.Controllers
         // POST: Products/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "ProductAdd")]
         public ActionResult Create(ProductCreateVm product)
         {
 
@@ -158,6 +162,7 @@ namespace Sklepix.Controllers
         }
 
         // GET: Products/Edit/5
+        [Authorize(Roles = "ProductEdit")]
         public ActionResult Edit(int id)
         {
             ProductEntity? product = _repository.OneInclude(id);
@@ -200,6 +205,7 @@ namespace Sklepix.Controllers
         // POST: Products/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "ProductEdit")]
         public ActionResult Edit(ProductEditVm product)
         {
             if(!IsProductCorrect(product))
@@ -233,6 +239,7 @@ namespace Sklepix.Controllers
         }
 
         // GET: Products/Delete/5
+        [Authorize(Roles = "ProductRemove")]
         public ActionResult Delete(int id)
         {
             ProductEntity? product = _repository.One(id);
@@ -251,6 +258,7 @@ namespace Sklepix.Controllers
         // POST: Products/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "ProductRemove")]
         public ActionResult Delete(int id, IFormCollection collection)
         {
             try

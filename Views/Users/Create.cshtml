@@ -44,5 +44,22 @@
         <span asp-validation-for="Description" class="text-danger"></span>
     </div>
     <br />
+    <div class="form-group">
+        <label asp-for="SelectedRoles">
+            <span>User's roles</span>
+        </label>
+        @foreach(string roleName in Model.Roles)
+        {
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="">
+                <label class="form-check-label">
+                    <span>@roleName</span>
+                </label>
+            </div>
+        }
+        <span asp-validation-for="SelectedRoles" class="text-danger"></span>
+    </div>
+    <br />
     <input type="submit" class="form-control btn btn-success" value="Create user" />
 </form>
+<br />

@@ -22,6 +22,7 @@ namespace Sklepix.Controllers
         }
 
         // GET: Aisles
+        [Authorize(Roles = "AisleView")]
         public ActionResult Index()
         {
             List<AisleEntity> entities = _repository.List();
@@ -68,6 +69,7 @@ namespace Sklepix.Controllers
         }
 
         // GET: Aisles/Details
+        [Authorize(Roles = "AisleView")]
         public ActionResult Details(int id)
         {
             AisleEntity? aisle = _repository.One(id);
@@ -100,14 +102,16 @@ namespace Sklepix.Controllers
         }
 
         // GET: Aisles/Create
+        [Authorize(Roles = "AisleAdd")]
         public ActionResult Create()
         {
             return View();
         }
-        
+
         // POST: Aisles/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "AisleAdd")]
         public ActionResult Create(AisleDto aisle)
         {
 
@@ -133,6 +137,7 @@ namespace Sklepix.Controllers
         }
 
         // GET: Aisles/CreateRow/AisleID
+        [Authorize(Roles = "AisleRowManage")]
         public ActionResult CreateRow(int id)
         {
             AisleEntity? aisle = _repository.One(id);
@@ -148,6 +153,7 @@ namespace Sklepix.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "AisleRowManage")]
         public ActionResult CreateRow(AisleRowDto aisleRow)
         {
             try
@@ -187,6 +193,7 @@ namespace Sklepix.Controllers
         }
 
         // GET: Aisles/Edit/5
+        [Authorize(Roles = "AisleEdit")]
         public ActionResult Edit(int id)
         {
             AisleEntity? aisle = _repository.One(id);
@@ -205,6 +212,7 @@ namespace Sklepix.Controllers
         // POST: Aisles/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "AisleEdit")]
         public ActionResult Edit(AisleDto aisle)
         {
             if(!IsAisleCorrect(aisle))
@@ -230,6 +238,7 @@ namespace Sklepix.Controllers
         }
 
         // GET: Aisles/Delete/5
+        [Authorize(Roles = "AisleRemove")]
         public ActionResult Delete(int id)
         {
             AisleEntity? aisle = _repository.One(id);
@@ -248,6 +257,7 @@ namespace Sklepix.Controllers
         // POST: Aisles/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "AisleRemove")]
         public ActionResult Delete(AisleVm aisleVm)
         {
             try
@@ -279,6 +289,7 @@ namespace Sklepix.Controllers
         }
 
         // GET: Aisles/DeleteRow/AisleId/Row
+        [Authorize(Roles = "AisleRowManage")]
         public ActionResult DeleteRow(int id, int secondId)
         {
             return View(new AisleRowDto 
@@ -291,6 +302,7 @@ namespace Sklepix.Controllers
         // GET: Aisles/DeleteRow/AisleId/Row
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "AisleRowManage")]
         public ActionResult DeleteRow(AisleRowDto aisleRow)
         {
             try

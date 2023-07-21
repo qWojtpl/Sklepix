@@ -11,8 +11,6 @@ namespace Sklepix
     public class Program
     {
 
-        public static WebApplication AppInstance;
-
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -22,10 +20,13 @@ namespace Sklepix
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddDefaultIdentity<UserEntity>(options => {
+            builder.Services.AddDefaultIdentity<UserEntity>(options =>
+            {
                 options.SignIn.RequireConfirmedAccount = false;
                 options.Password.RequireDigit = false;
             })
+                .AddRoles<RoleEntity>()
+                .AddRoleManager<RoleManager<RoleEntity>>()
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -40,7 +41,13 @@ namespace Sklepix
             var app = builder.Build();
 
             var scope = app.Services.CreateScope();
-            Task.Run(async () => await UsersSeeder.Seed(scope.ServiceProvider.GetRequiredService<UserManager<UserEntity>>()));
+            Task.Run(async () => {
+                await RolesSeeder.Seed(scope.ServiceProvider.GetRequiredService<RoleManager<RoleEntity>>());
+                await UsersSeeder.Seed(
+                    scope.ServiceProvider.GetRequiredService<UserManager<UserEntity>>(),
+                    scope.ServiceProvider.GetRequiredService<RoleManager<RoleEntity>>()
+                );
+            });
 
             if (app.Environment.IsDevelopment())
             {
@@ -68,5 +75,6 @@ namespace Sklepix
 
             app.Run();
         }
+
     }
 }

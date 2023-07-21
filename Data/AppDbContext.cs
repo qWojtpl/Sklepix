@@ -15,6 +15,7 @@ namespace Sklepix.Data
         public DbSet<AisleEntity> Aisles { get; set; }
         public DbSet<AisleRowEntity> AisleRows { get; set; }
         public DbSet<UserEntity> Users { get; set; }
+        public DbSet<RoleEntity> Roles { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)

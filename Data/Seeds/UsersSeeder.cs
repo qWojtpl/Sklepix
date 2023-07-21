@@ -6,7 +6,7 @@ namespace Sklepix.Data.Seeds
     public class UsersSeeder
     {
 
-        public static async Task<bool> Seed(UserManager<UserEntity> userManager)
+        public static async Task<bool> Seed(UserManager<UserEntity> userManager, RoleManager<RoleEntity> roleManager)
         {
             if((await userManager.FindByEmailAsync("admin@sklepix.test")) != null)
             {
@@ -20,6 +20,10 @@ namespace Sklepix.Data.Seeds
                 Type = 1
             };
             await userManager.CreateAsync(model, "ADMIN$123z");
+            foreach(RoleEntity role in roleManager.Roles.ToList())
+            {
+                Console.WriteLine(await userManager.AddToRoleAsync(model, role.Name));
+            }
             return true;
         }
 

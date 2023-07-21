@@ -14,9 +14,24 @@
 <h3>@Model.Mail</h3>
 <hr/>
 
+<br />
+
+<b>Roles: </b>
+
+<ul>
+    @foreach(string roleName in Model.Roles)
+    {
+        <li>@roleName</li>
+    }
+</ul>
+
+<br />
+
 @if(Model.Description == null)
 {
     <span class="form-control text-danger">No description found</span>
 } else {
     <span class="form-control">@Model.Description</span>
 }
+
+<br />

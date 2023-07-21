@@ -24,6 +24,7 @@ namespace Sklepix.Controllers
         }
 
         // GET: Categories
+        [Authorize(Roles = "CategoryView")]
         public ActionResult Index()
         {
             List<CategoryEntity> entities = _repository.List();
@@ -59,6 +60,7 @@ namespace Sklepix.Controllers
         }
 
         // GET: Categories/Details/5
+        [Authorize(Roles = "CategoryView")]
         public ActionResult Details(int id)
         {
             CategoryEntity? category = _repository.One(id);
@@ -75,6 +77,7 @@ namespace Sklepix.Controllers
         }
 
         // GET: Categories/Create
+        [Authorize(Roles = "CategoryAdd")]
         public ActionResult Create()
         {
             return View();
@@ -83,6 +86,7 @@ namespace Sklepix.Controllers
         // POST: Categories/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CategoryAdd")]
         public ActionResult Create(CategoryDto category)
         {
 
@@ -108,6 +112,7 @@ namespace Sklepix.Controllers
         }
 
         // GET: Categories/Edit/5
+        [Authorize(Roles = "CategoryEdit")]
         public ActionResult Edit(int id)
         {
             CategoryEntity? category = _repository.One(id);
@@ -126,6 +131,7 @@ namespace Sklepix.Controllers
         // POST: Categories/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CategoryEdit")]
         public ActionResult Edit(CategoryDto category)
         {
             if(!IsCategoryCorrect(category))
@@ -151,6 +157,7 @@ namespace Sklepix.Controllers
         }
 
         // GET: Categories/Delete/5
+        [Authorize(Roles = "CategoryRemove")]
         public ActionResult Delete(int id)
         {
             CategoryEntity? category = _repository.One(id);
@@ -169,6 +176,7 @@ namespace Sklepix.Controllers
         // POST: Categories/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CategoryRemove")]
         public ActionResult Delete(CategoryVm categoryVm)
         {
             try

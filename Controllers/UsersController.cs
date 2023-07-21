@@ -15,26 +15,30 @@ namespace Sklepix.Controllers
 
         public readonly UsersRepository _repository;
         public readonly UserManager<UserEntity> _userManager;
+        public readonly RoleManager<RoleEntity> _roleManager;
 
-        public UsersController(UsersRepository repository, UserManager<UserEntity> userManager)
+        public UsersController(UsersRepository repository, UserManager<UserEntity> userManager, RoleManager<RoleEntity> roleManager)
         {
             this._repository = repository;
             this._userManager = userManager;
+            this._roleManager = roleManager;
         }
 
         // GET: Users
-        public ActionResult Index()
+        [Authorize(Roles = "UserView")]
+        public async Task<ActionResult> Index()
         {
             List<UserEntity> entities = _repository.List();
             List<UserVm> views = new List<UserVm>();
-            foreach (UserEntity entity in entities)
+            foreach(UserEntity entity in entities)
             {
                 views.Add(new UserVm
                 {
                     Id = entity.Id,
                     Mail = entity.Email,
                     Description = entity.Description,
-                    Type = entity.Type
+                    Type = entity.Type,
+                    Roles = new List<string>(await _userManager.GetRolesAsync(entity))
                 });
             }
             return View(new UserIndexVm
@@ -44,10 +48,11 @@ namespace Sklepix.Controllers
         }
 
         // GET: Users/Details/5
-        public ActionResult Details(string id)
+        [Authorize(Roles = "UserView")]
+        public async Task<ActionResult> Details(string id)
         {
             UserEntity? user = _repository.One(id);
-            if (user == null)
+            if(user == null)
             {
                 return RedirectToAction("Index", "Users");
             }
@@ -55,21 +60,29 @@ namespace Sklepix.Controllers
             {
                 Id = user.Id,
                 Mail = user.Email,
-                Description = user.Description
+                Description = user.Description,
+                Roles = new List<string>(await _userManager.GetRolesAsync(user))
             });
         }
 
         // GET: Users/Create
+        [Authorize(Roles = "UserAdd")]
         public ActionResult Create()
         {
-            return View();
+            List<string> roleNames = GetRoleNames();
+            return View(new UserDto
+            {
+                Roles = roleNames
+            });
         }
 
         // POST: Users/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "UserAdd")]
         public async Task<ActionResult> Create(UserDto user)
         {
+            user.Roles = GetRoleNames();
             try
             {
                 if(!(await new PasswordValidator<UserEntity>().ValidateAsync(_userManager, null, user.Password)).Succeeded)
@@ -93,6 +106,7 @@ namespace Sklepix.Controllers
         }
 
         // GET: Users/Edit/5
+        [Authorize(Roles = "ProductEdit")]
         public ActionResult Edit(string id)
         {
             UserEntity? user = _repository.One(id);
@@ -115,6 +129,7 @@ namespace Sklepix.Controllers
         // POST: Users/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "ProductEdit")]
         public async Task<ActionResult> Edit(UserDto user)
         {
             try
@@ -145,6 +160,7 @@ namespace Sklepix.Controllers
         }
 
         // GET: Users/Delete/5
+        [Authorize(Roles = "ProductRemove")]
         public ActionResult Delete(string id)
         {
             UserEntity? user = _repository.One(id);
@@ -167,6 +183,7 @@ namespace Sklepix.Controllers
         // POST: Users/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "ProductRemove")]
         public async Task<ActionResult> Delete(UserVm userVm)
         {
             try
@@ -178,6 +195,16 @@ namespace Sklepix.Controllers
             {
                 return View(userVm);
             }
+        }
+
+        public List<string> GetRoleNames()
+        {
+            List<string> roleNames = new List<string>();
+            foreach (RoleEntity role in _roleManager.Roles.ToList())
+            {
+                roleNames.Add(role.Name);
+            }
+            return roleNames;
         }
     }
 }
