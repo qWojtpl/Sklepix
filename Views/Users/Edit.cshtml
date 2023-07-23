@@ -35,5 +35,51 @@
         <span asp-validation-for="Description" class="text-danger"></span>
     </div>
     <br />
+    <div class="form-group">
+        <label asp-for="SelectedRoles">
+            <span>User's roles</span>
+        </label>
+        @foreach(string roleName in Model.Roles)
+        {
+            <div class="form-check">
+                <input class="form-check-input role-checkbox" type="checkbox" id="role-@roleName" value="">
+                <label class="form-check-label" for="role-@roleName" id="role-@roleName-label">
+                    @roleName
+                </label>
+            </div>
+        }
+        <input asp-for="SelectedRoles" type="hidden" value="" id="roles" />
+        <span asp-validation-for="SelectedRoles" class="text-danger"></span>
+    </div>
+    <br />
     <input type="submit" class="form-control btn btn-success" value="Edit user" />
 </form>
+
+<script>
+
+    const checkboxes = document.getElementsByClassName("role-checkbox");
+
+    function generateRoleString() {
+        var str = "";
+        for(var i = 0; i < checkboxes.length; i++) {
+            if(checkboxes[i].checked) {
+                str += document.getElementById(checkboxes[i].id + "-label").innerText + ";";
+            }
+        }
+        document.getElementById("roles").value = str;
+    }
+
+    for(var i = 0; i < checkboxes.length; i++) {
+        checkboxes[i].addEventListener("input", () => {
+            generateRoleString();
+        });
+        if("@Model.SelectedRoles".includes(document.getElementById(checkboxes[i].id + "-label").innerText)) {
+            checkboxes[i].checked = true;
+        }        
+    }
+
+    generateRoleString();
+
+</script>
+
+<br />

@@ -10,11 +10,13 @@ namespace Sklepix.Repositories
     {
         private readonly AppDbContext _context;
         private readonly UserManager<UserEntity> _userManager;
+        private readonly RoleManager<RoleEntity> _roleManager;
 
-        public UsersRepository(AppDbContext appDbContext, UserManager<UserEntity> userManager)
+        public UsersRepository(AppDbContext appDbContext, UserManager<UserEntity> userManager, RoleManager<RoleEntity> roleManager)
         {
             this._context = appDbContext;
             this._userManager = userManager;
+            this._roleManager = roleManager;
         }
 
         public List<UserEntity> List()
@@ -29,25 +31,34 @@ namespace Sklepix.Repositories
                 .FirstOrDefault(n => n.Id == id);
         }
 
-        public async Task<bool> Add(UserEntity model, string password)
+        public async Task<bool> Add(UserEntity model, string password, string? roles)
         {
             await _userManager.CreateAsync(model, password);
+            if(roles != null)
+            {
+                await AssignRoles(model, roles);
+            }
             return true;
         }
 
-        public async Task<bool> Edit(string id, UserEntity model, string? password)
+        public async Task<bool> Edit(string id, UserEntity model, string? password, string? roles)
         {
-            if (!CanManage(id))
+            if(!CanManage(id))
             {
                 return false;
             }
-            if (password != null)
+            if(password != null)
             {
                 var token = await _userManager.GeneratePasswordResetTokenAsync(model);
                 await _userManager.ResetPasswordAsync(model, token, password);
             }
             model.Id = id;
-            Console.WriteLine(await _userManager.UpdateAsync(model));
+            await _userManager.UpdateAsync(model);
+            if(roles != null)
+            {
+                await _userManager.RemoveFromRolesAsync(model, await _userManager.GetRolesAsync(model));
+                await AssignRoles(model, roles);
+            }
             return true;
         }
 
@@ -91,6 +102,19 @@ namespace Sklepix.Repositories
             if (entity.Type == 1)
             {
                 return false;
+            }
+            return true;
+        }
+
+        public async Task<bool> AssignRoles(UserEntity user, string roles)
+        {
+            string[] split = roles.Split(";");
+            for (int i = 0; i < split.Length - 1; i++)
+            {
+                if ((await _roleManager.FindByNameAsync(split[i])) != null)
+                {
+                    await _userManager.AddToRoleAsync(user, split[i]);
+                }
             }
             return true;
         }

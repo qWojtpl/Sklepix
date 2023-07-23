@@ -69,10 +69,9 @@ namespace Sklepix.Controllers
         [Authorize(Roles = "UserAdd")]
         public ActionResult Create()
         {
-            List<string> roleNames = GetRoleNames();
             return View(new UserDto
             {
-                Roles = roleNames
+                Roles = GetRoleNames()
             });
         }
 
@@ -96,7 +95,7 @@ namespace Sklepix.Controllers
                     Email = user.Mail,
                     Description = user.Description
                 };
-                await _repository.Add(newUser, user.Password);
+                await _repository.Add(newUser, user.Password, user.SelectedRoles);
                 return RedirectToAction("Index", "Users");
             }
             catch
@@ -106,15 +105,15 @@ namespace Sklepix.Controllers
         }
 
         // GET: Users/Edit/5
-        [Authorize(Roles = "ProductEdit")]
-        public ActionResult Edit(string id)
+        [Authorize(Roles = "UserEdit")]
+        public async Task<ActionResult> Edit(string id)
         {
             UserEntity? user = _repository.One(id);
-            if (user == null)
+            if(user == null)
             {
                 return RedirectToAction("Index", "Users");
             }
-            if (user.Type == 1)
+            if(user.Type == 1)
             {
                 return View(new UserDto());
             }
@@ -123,13 +122,15 @@ namespace Sklepix.Controllers
                 Id = user.Id,
                 Mail = user.Email,
                 Description = user.Description,
+                SelectedRoles = await GetRolesString(user),
+                Roles = GetRoleNames()
             });
         }
 
         // POST: Users/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "ProductEdit")]
+        [Authorize(Roles = "UserEdit")]
         public async Task<ActionResult> Edit(UserDto user)
         {
             try
@@ -150,7 +151,7 @@ namespace Sklepix.Controllers
                 newUser.UserName = user.Mail;
                 newUser.Email = user.Mail;
                 newUser.Description = user.Description;
-                await _repository.Edit(user.Id, newUser, user.Password);
+                await _repository.Edit(user.Id, newUser, user.Password, user.SelectedRoles);
                 return RedirectToAction("Index", "Users");
             }
             catch
@@ -160,7 +161,7 @@ namespace Sklepix.Controllers
         }
 
         // GET: Users/Delete/5
-        [Authorize(Roles = "ProductRemove")]
+        [Authorize(Roles = "UserRemove")]
         public ActionResult Delete(string id)
         {
             UserEntity? user = _repository.One(id);
@@ -183,7 +184,7 @@ namespace Sklepix.Controllers
         // POST: Users/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "ProductRemove")]
+        [Authorize(Roles = "UserRemove")]
         public async Task<ActionResult> Delete(UserVm userVm)
         {
             try
@@ -200,11 +201,26 @@ namespace Sklepix.Controllers
         public List<string> GetRoleNames()
         {
             List<string> roleNames = new List<string>();
-            foreach (RoleEntity role in _roleManager.Roles.ToList())
+            foreach(RoleEntity role in _roleManager.Roles.ToList())
             {
                 roleNames.Add(role.Name);
             }
             return roleNames;
         }
+
+        public async Task<string> GetRolesString(UserEntity user)
+        {
+            string str = "";
+            IList<string> userRoles = await _userManager.GetRolesAsync(user);
+            foreach (string roleName in GetRoleNames())
+            {
+                if(userRoles.Contains(roleName))
+                {
+                    str += roleName + ";";
+                }
+            }
+            return str;
+        }
+
     }
 }
