@@ -6,6 +6,7 @@ namespace Sklepix.Repositories
     {
         List<UserEntity> List();
         UserEntity? One(string id);
+        UserEntity? OneByName(string? name);
         Task<bool> Add(UserEntity model, string password, string? roles);
         Task<bool> Edit(string id, UserEntity model, string password, string? roles);
         Task<bool> Delete(string id);

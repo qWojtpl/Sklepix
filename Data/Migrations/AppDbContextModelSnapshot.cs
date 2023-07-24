@@ -180,7 +180,12 @@ namespace SklepixIdentity.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Aisles");
 
@@ -440,6 +445,15 @@ namespace SklepixIdentity.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Sklepix.Data.Entities.AisleEntity", b =>
+                {
+                    b.HasOne("Sklepix.Data.Entities.UserEntity", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Sklepix.Data.Entities.AisleRowEntity", b =>

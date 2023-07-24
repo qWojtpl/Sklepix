@@ -31,6 +31,16 @@ namespace Sklepix.Repositories
                 .FirstOrDefault(n => n.Id == id);
         }
 
+        public UserEntity? OneByName(string? name)
+        {
+            if(name == null)
+            {
+                return null;
+            }
+            return _context.Users
+                .FirstOrDefault(n => n.Email == name || n.UserName == name);
+        }
+
         public async Task<bool> Add(UserEntity model, string password, string? roles)
         {
             await _userManager.CreateAsync(model, password);
@@ -95,11 +105,11 @@ namespace Sklepix.Repositories
         public bool CanManage(string id)
         {
             UserEntity? entity = One(id);
-            if (entity == null)
+            if(entity == null)
             {
                 return false;
             }
-            if (entity.Type == 1)
+            if(entity.Type == 1)
             {
                 return false;
             }

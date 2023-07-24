@@ -16,12 +16,14 @@ namespace Sklepix.Controllers
         public readonly UsersRepository _repository;
         public readonly UserManager<UserEntity> _userManager;
         public readonly RoleManager<RoleEntity> _roleManager;
+        public readonly AislesRepository _aislesRepository;
 
-        public UsersController(UsersRepository repository, UserManager<UserEntity> userManager, RoleManager<RoleEntity> roleManager)
+        public UsersController(UsersRepository repository, UserManager<UserEntity> userManager, RoleManager<RoleEntity> roleManager, AislesRepository aislesRepository)
         {
             this._repository = repository;
             this._userManager = userManager;
             this._roleManager = roleManager;
+            this._aislesRepository = aislesRepository;
         }
 
         // GET: Users
@@ -30,6 +32,20 @@ namespace Sklepix.Controllers
         {
             List<UserEntity> entities = _repository.List();
             List<UserVm> views = new List<UserVm>();
+            List<UserEntity> usedEntities = new List<UserEntity>();
+            foreach(AisleEntity aisle in _aislesRepository.List())
+            {
+                foreach(UserEntity e in entities)
+                {
+                    if(e.Equals(aisle.User))
+                    {
+                        if(!usedEntities.Contains(e))
+                        {
+                            usedEntities.Add(e);
+                        }
+                    }
+                }
+            }
             foreach(UserEntity entity in entities)
             {
                 views.Add(new UserVm
@@ -38,7 +54,8 @@ namespace Sklepix.Controllers
                     Mail = entity.Email,
                     Description = entity.Description,
                     Type = entity.Type,
-                    Roles = new List<string>(await _userManager.GetRolesAsync(entity))
+                    Roles = new List<string>(await _userManager.GetRolesAsync(entity)),
+                    IsUsed = usedEntities.Contains(entity)
                 });
             }
             return View(new UserIndexVm
@@ -194,6 +211,7 @@ namespace Sklepix.Controllers
             }
             catch
             {
+                ModelState.AddModelError("Mail", "Some aisles are assigned to this user!");
                 return View(userVm);
             }
         }

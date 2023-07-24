@@ -10,20 +10,6 @@ namespace SklepixIdentity.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Aisles",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Aisles", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
                 {
@@ -81,26 +67,6 @@ namespace SklepixIdentity.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AisleRows",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    RowNumber = table.Column<int>(type: "int", nullable: false),
-                    AisleId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AisleRows", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AisleRows_Aisles_AisleId",
-                        column: x => x.AisleId,
-                        principalTable: "Aisles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -119,6 +85,26 @@ namespace SklepixIdentity.Data.Migrations
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Aisles",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Aisles", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Aisles_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -207,6 +193,26 @@ namespace SklepixIdentity.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AisleRows",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RowNumber = table.Column<int>(type: "int", nullable: false),
+                    AisleId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AisleRows", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AisleRows_Aisles_AisleId",
+                        column: x => x.AisleId,
+                        principalTable: "Aisles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Products",
                 columns: table => new
                 {
@@ -243,12 +249,12 @@ namespace SklepixIdentity.Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "Aisles",
-                columns: new[] { "Id", "Description", "Name" },
+                columns: new[] { "Id", "Description", "Name", "UserId" },
                 values: new object[,]
                 {
-                    { 1, "Fridge aisle", "Fridges" },
-                    { 2, "Aisle at the left from the enterance", "Left aisle" },
-                    { 3, "Aisle at the right from the enterance", "Right aisle" }
+                    { 1, "Fridge aisle", "Fridges", null },
+                    { 2, "Aisle at the left from the enterance", "Left aisle", null },
+                    { 3, "Aisle at the right from the enterance", "Right aisle", null }
                 });
 
             migrationBuilder.InsertData(
@@ -265,6 +271,11 @@ namespace SklepixIdentity.Data.Migrations
                 name: "IX_AisleRows_AisleId",
                 table: "AisleRows",
                 column: "AisleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Aisles_UserId",
+                table: "Aisles",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -345,9 +356,6 @@ namespace SklepixIdentity.Data.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
                 name: "AisleRows");
 
             migrationBuilder.DropTable(
@@ -355,6 +363,9 @@ namespace SklepixIdentity.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Aisles");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
         }
     }
 }

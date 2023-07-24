@@ -34,5 +34,18 @@
         <span asp-validation-for="Description" class="text-danger"></span>
     </div>
     <br />
+    <div class="form-group">
+        <label asp-for="UserName">
+            <span>User owning this aisle</span>
+        </label>
+        <select asp-for="UserName" class="form-control">
+            @foreach(string userName in Model.UserNames)
+            {
+                <option value="@userName">@userName</option>
+            }
+        </select>
+        <span asp-validation-for="UserName" class="text-danger"></span>
+    </div>
+    <br />
     <input type="submit" class="form-control btn btn-success" value="Create new aisle" />
 </form>

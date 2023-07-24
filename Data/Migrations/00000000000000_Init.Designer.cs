@@ -12,7 +12,7 @@ using Sklepix.Data;
 namespace SklepixIdentity.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230721061254_Init")]
+    [Migration("20230724151442_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -182,7 +182,12 @@ namespace SklepixIdentity.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Aisles");
 
@@ -442,6 +447,15 @@ namespace SklepixIdentity.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Sklepix.Data.Entities.AisleEntity", b =>
+                {
+                    b.HasOne("Sklepix.Data.Entities.UserEntity", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Sklepix.Data.Entities.AisleRowEntity", b =>

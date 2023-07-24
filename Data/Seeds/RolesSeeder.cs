@@ -12,7 +12,7 @@ namespace Sklepix.Data.Seeds
                 "CategoryView", "CategoryAdd", "CategoryEdit", "CategoryRemove", 
                 "AisleView", "AisleAdd", "AisleEdit", "AisleRemove", "AisleRowManage",
                 "ProductView", "ProductAdd", "ProductEdit", "ProductRemove",
-                "UserView", "UserAdd", "UserRemove"
+                "UserView", "UserAdd", "UserEdit", "UserRemove"
             };
             foreach(string name in names) 
             {

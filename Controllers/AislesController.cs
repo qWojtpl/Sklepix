@@ -13,12 +13,14 @@ namespace Sklepix.Controllers
         public readonly AislesRepository _repository;
         public readonly AisleRowsRepository _rowRepository;
         public readonly ProductsRepository _productsRepository;
+        public readonly UsersRepository _usersRepository;
 
-        public AislesController(AislesRepository repository, AisleRowsRepository rowRepository, ProductsRepository productsRepository)
+        public AislesController(AislesRepository repository, AisleRowsRepository rowRepository, ProductsRepository productsRepository, UsersRepository usersRepository)
         {
             this._repository = repository;
             this._rowRepository = rowRepository;
             this._productsRepository = productsRepository;
+            this._usersRepository = usersRepository;
         }
 
         // GET: Aisles
@@ -92,12 +94,18 @@ namespace Sklepix.Controllers
                     }
                 }
             }
+            string userName = "";
+            if(aisle.User != null)
+            {
+                userName = aisle.User.Email;
+            }
             return View(new AisleVm() 
             { 
-                Id = aisle.Id, 
-                Name = aisle.Name, 
+                Id = aisle.Id,
+                Name = aisle.Name,
                 Description = aisle.Description,
-                Rows = rowsForView 
+                Rows = rowsForView,
+                UserName = userName
             });
         }
 
@@ -105,7 +113,10 @@ namespace Sklepix.Controllers
         [Authorize(Roles = "AisleAdd")]
         public ActionResult Create()
         {
-            return View();
+            return View(new AisleDto
+            {
+                UserNames = GetUserNames()
+            });
         }
 
         // POST: Aisles/Create
@@ -124,7 +135,8 @@ namespace Sklepix.Controllers
                 AisleEntity newAisle = new AisleEntity() 
                 { 
                     Name = aisle.Name, 
-                    Description = aisle.Description 
+                    Description = aisle.Description,
+                    User = _usersRepository.OneByName(aisle.UserName)
                 };
                 _repository.Add(newAisle);
                 _repository.Save();
@@ -201,11 +213,18 @@ namespace Sklepix.Controllers
             {
                 return RedirectToAction("Index", "Aisles");
             }
-            return View(new AisleDto 
-            { 
-                Id = aisle.Id, 
-                Name = aisle.Name, 
-                Description = aisle.Description 
+            string userName = "";
+            if(aisle.User != null)
+            {
+                userName = aisle.User.UserName;
+            }
+            return View(new AisleDto
+            {
+                Id = aisle.Id,
+                Name = aisle.Name,
+                Description = aisle.Description,
+                UserName = userName,
+                UserNames = GetUserNames()
             });
         }
 
@@ -225,7 +244,8 @@ namespace Sklepix.Controllers
                 { 
                     Id = aisle.Id, 
                     Name = aisle.Name, 
-                    Description = aisle.Description 
+                    Description = aisle.Description,
+                    User = _usersRepository.OneByName(aisle.UserName)
                 };
                 _repository.Edit(aisle.Id, newAisle);
                 _repository.Save();
@@ -361,6 +381,16 @@ namespace Sklepix.Controllers
                 }
             }
             return true;
+        }
+
+        public List<string> GetUserNames()
+        {
+            List<string> userNames = new List<string>();
+            foreach(UserEntity user in _usersRepository.List())
+            {
+                userNames.Add(user.UserName);
+            }
+            return userNames;
         }
 
     }

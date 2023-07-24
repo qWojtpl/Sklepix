@@ -1,4 +1,5 @@
-﻿using Sklepix.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using Sklepix.Data;
 using Sklepix.Data.Entities;
 
 namespace Sklepix.Repositories
@@ -22,6 +23,7 @@ namespace Sklepix.Repositories
         public AisleEntity? One(int id)
         {
             return _context.Aisles
+                .Include(m => m.User)
                 .FirstOrDefault(n => n.Id == id);
         }
 
