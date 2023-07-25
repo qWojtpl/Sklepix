@@ -14,6 +14,7 @@ namespace Sklepix.Data
         public DbSet<CategoryEntity> Categories { get; set; }
         public DbSet<AisleEntity> Aisles { get; set; }
         public DbSet<AisleRowEntity> AisleRows { get; set; }
+        public DbSet<TaskEntity> Tasks { get; set; }
         public DbSet<UserEntity> Users { get; set; }
         public DbSet<RoleEntity> Roles { get; set; }
 

@@ -1,0 +1,44 @@
+﻿@using Sklepix.Models.ViewModels
+@model TaskIndexVm
+@{
+    ViewData["Title"] = "Tasks";
+}
+
+<a asp-action="Create" class="btn btn-secondary float-end">
+    <span>Assign task</span>
+</a>
+
+<table class="table align-middle">
+    <thead>
+        <tr>
+            <th scope="col" style="width: 200px;">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">User</th>
+            <th scope="col" style="width: 25%;">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(TaskVm task in Model.Tasks)
+        {
+            <tr>
+                <td scope="row">
+                    <a asp-action="Details" asp-route-id="@task.Id" class="text-reset text-decoration-none">@task.Id</a>
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@task.Id" class="text-reset text-decoration-none"><b>@task.Name</b></a>
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@task.Id" class="text-reset text-decoration-none"><b>@task.UserName</b></a>
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@task.Id" class="btn btn-success btn-sm">
+                        <span>Details</span>
+                    </a>
+                    <a asp-action="Edit" asp-route-id="@task.Id" class="btn btn-info btn-sm">
+                        <span>Edit</span>
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

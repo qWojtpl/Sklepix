@@ -22,7 +22,7 @@ namespace Sklepix.Data.Seeds
             await userManager.CreateAsync(model, "ADMIN$123z");
             foreach(RoleEntity role in roleManager.Roles.ToList())
             {
-                Console.WriteLine(await userManager.AddToRoleAsync(model, role.Name));
+                await userManager.AddToRoleAsync(model, role.Name);
             }
             return true;
         }

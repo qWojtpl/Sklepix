@@ -12,7 +12,7 @@ using Sklepix.Data;
 namespace SklepixIdentity.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230724151442_Init")]
+    [Migration("20230725130335_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -317,6 +317,46 @@ namespace SklepixIdentity.Data.Migrations
                     b.ToTable("Products");
                 });
 
+            modelBuilder.Entity("Sklepix.Data.Entities.TaskEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("AssignTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Comment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Deadline")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Tasks");
+                });
+
             modelBuilder.Entity("Sklepix.Data.Entities.UserEntity", b =>
                 {
                     b.Property<string>("Id")
@@ -488,6 +528,15 @@ namespace SklepixIdentity.Data.Migrations
                     b.Navigation("Category");
 
                     b.Navigation("Row");
+                });
+
+            modelBuilder.Entity("Sklepix.Data.Entities.TaskEntity", b =>
+                {
+                    b.HasOne("Sklepix.Data.Entities.UserEntity", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

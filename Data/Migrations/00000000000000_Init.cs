@@ -193,6 +193,31 @@ namespace SklepixIdentity.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Tasks",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    AssignTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Deadline = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Comment = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tasks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Tasks_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AisleRows",
                 columns: table => new
                 {
@@ -330,6 +355,11 @@ namespace SklepixIdentity.Data.Migrations
                 name: "IX_Products_RowId",
                 table: "Products",
                 column: "RowId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tasks_UserId",
+                table: "Tasks",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -351,6 +381,9 @@ namespace SklepixIdentity.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Products");
+
+            migrationBuilder.DropTable(
+                name: "Tasks");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
