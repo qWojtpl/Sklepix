@@ -1,0 +1,62 @@
+﻿@using Sklepix.Models.DataTransferObjects
+@model TaskDto
+@{
+    ViewData["Title"] = "Edit task";
+}
+
+<a asp-action="Index" class="btn btn-primary float-start">
+    <span>Go back</span>
+</a>
+
+<form asp-action="Edit" style="width:50%;height:50%;margin-left:25%;">
+    <h2>Edit task</h2>
+    <br />
+    <div class="form-group">
+        <label asp-for="Name">
+            <span>Task name</span>
+        </label>
+        <input asp-for="Name" class="form-control" placeholder="Task name..." />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="Priority">
+            <span>Task priority</span>
+        </label>
+        <input asp-for="Priority" type="number" class="form-control" placeholder="Task priority..." />
+        <span asp-validation-for="Priority" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="Deadline">
+            <span>Deadline</span>
+        </label>
+        <input asp-for="Deadline" type="datetime-local" class="form-control" placeholder="Deadline..." />
+        <span asp-validation-for="Deadline" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="UserName">
+            <span>User assigned</span>
+        </label>
+        <select asp-for="UserName" class="form-select">
+            @foreach (string userName in Model.UserNames)
+            {
+                <option value="@userName">@userName</option>
+            }
+        </select>
+        <span asp-validation-for="UserName" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="Description">
+            <span>Task description</span>
+        </label>
+        <textarea asp-for="Description" class="form-control" placeholder="Task description..."></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <br />
+    <input type="submit" class="form-control btn btn-success" value="Edit task" />
+</form>
+
+<br />

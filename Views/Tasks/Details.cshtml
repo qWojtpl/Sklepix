@@ -1,0 +1,37 @@
+﻿@using Sklepix.Data.Entities
+@using Sklepix.Models.ViewModels
+@model TaskVm
+@{
+    ViewData["Title"] = "Task details";
+}
+
+<a asp-action="Index" class="btn btn-primary">
+    <span>Go back</span>
+</a>
+
+<br />
+<br />
+
+<h3>@Model.Name</h3>
+<hr/>
+
+<span>Assign date: <b>@Model.AssignDate</b></span><br />
+<span>Deadline: <b>@Model.Deadline</b></span><br />
+<span>Status: <b>@Model.Status</b></span><br />
+<span>Priority: <b>@Model.Priority</b></span><br /><br />
+
+@if(Model.UserName == null || Model.UserName == "")
+{
+    <span class="form-control text-danger">No user is assigned to this task (?)</span>
+} else {
+    <span class="form-control">User assigned: @Model.UserName</span>
+}
+
+<br />
+
+@if(Model.Description == null)
+{
+    <span class="form-control text-danger">No description found</span>
+} else {
+    <span class="form-control">@Model.Description</span>
+}

@@ -302,23 +302,23 @@ namespace Sklepix.Controllers
 
         private bool IsProductCorrect(ProductEditVm? product)
         {
-            if (product == null)
+            if(product == null)
             {
                 return false;
             }
-            if (product.Name == null)
+            if(product.Name == null)
             {
                 ModelState.AddModelError("Name", "This field is required");
                 return false;
             }
-            if (product.Name.Contains("<") || product.Name.Contains(">"))
+            if(product.Name.Contains("<") || product.Name.Contains(">"))
             {
                 ModelState.AddModelError("Name", "This field can't contain tag symbols");
                 return false;
             }
-            if (product.Description != null)
+            if(product.Description != null)
             {
-                if (product.Description.Contains("<") || product.Description.Contains(">"))
+                if(product.Description.Contains("<") || product.Description.Contains(">"))
                 {
                     ModelState.AddModelError("Description", "This field can't contain tag symbols");
                     return false;

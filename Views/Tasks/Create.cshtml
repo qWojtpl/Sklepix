@@ -1,0 +1,71 @@
+﻿@using Sklepix.Models.DataTransferObjects
+@model TaskDto
+@{
+    ViewData["Title"] = "Assign task";
+    string name = "";
+    string description = "";
+    int priority = 0;
+    if(Model != null)
+    {
+        name = (Model.Name == null) ? "" : Model.Name;
+        description = (Model.Description == null) ? "" : Model.Description;
+        priority = Model.Priority;
+    }
+}
+
+<a asp-action="Index" class="btn btn-primary float-start">
+    <span>Go back</span>
+</a>
+
+<form asp-action="Create" style="width:50%;height:50%;margin-left:25%;">
+    <h2>Assign task</h2>
+    <br />
+    <div class="form-group">
+        <label asp-for="Name">
+            <span>Task name</span>
+        </label>
+        <input asp-for="Name" class="form-control" placeholder="Task name..." value="@name" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="Priority">
+            <span>Task priority</span>
+        </label>
+        <input asp-for="Priority" type="number" class="form-control" placeholder="Task priority..." value="@priority" />
+        <span asp-validation-for="Priority" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="Deadline">
+            <span>Deadline</span>
+        </label>
+        <input asp-for="Deadline" type="datetime-local" class="form-control" placeholder="Deadline..." value="@priority" />
+        <span asp-validation-for="Deadline" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="UserName">
+            <span>User assigned</span>
+        </label>
+        <select asp-for="UserName" class="form-select">
+            @foreach(string userName in Model.UserNames)
+            {
+                <option value="@userName">@userName</option>
+            }
+        </select>
+        <span asp-validation-for="UserName" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="Description">
+            <span>Task description</span>
+        </label>
+        <textarea asp-for="Description" class="form-control" placeholder="Task description..." value="@description" ></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <br />
+    <input type="submit" class="form-control btn btn-success" value="Assign task" />
+</form>
+
+<br />

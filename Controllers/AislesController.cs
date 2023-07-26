@@ -125,7 +125,7 @@ namespace Sklepix.Controllers
         [Authorize(Roles = "AisleAdd")]
         public ActionResult Create(AisleDto aisle)
         {
-
+            aisle.UserNames = GetUserNames();
             if(!IsAisleCorrect(aisle))
             {
                 return View(aisle);
@@ -358,6 +358,11 @@ namespace Sklepix.Controllers
 
         private bool IsAisleCorrect(AisleDto aisle)
         {
+            if(aisle.Name == null)
+            {
+                ModelState.AddModelError("Name", "This field is required");
+                return false;
+            }
             List<AisleEntity> aisles = _repository.List();
             foreach(AisleEntity e in aisles)
             {

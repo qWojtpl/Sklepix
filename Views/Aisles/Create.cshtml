@@ -38,7 +38,7 @@
         <label asp-for="UserName">
             <span>User owning this aisle</span>
         </label>
-        <select asp-for="UserName" class="form-control">
+        <select asp-for="UserName" class="form-select">
             @foreach(string userName in Model.UserNames)
             {
                 <option value="@userName">@userName</option>

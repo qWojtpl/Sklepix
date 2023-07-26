@@ -11,9 +11,11 @@
 <table class="table align-middle">
     <thead>
         <tr>
-            <th scope="col" style="width: 200px;">ID</th>
+            <th scope="col" style="width: 4px;">ID</th>
             <th scope="col">Name</th>
             <th scope="col">User</th>
+            <th scope="col">Deadline</th>
+            <th scope="col">Status</th>
             <th scope="col" style="width: 25%;">Actions</th>
         </tr>
     </thead>
@@ -29,6 +31,12 @@
                 </td>
                 <td>
                     <a asp-action="Details" asp-route-id="@task.Id" class="text-reset text-decoration-none"><b>@task.UserName</b></a>
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@task.Id" class="text-reset text-decoration-none"><b>@task.Deadline</b></a>
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@task.Id" class="text-reset text-decoration-none"><b>@task.Status</b></a>
                 </td>
                 <td>
                     <a asp-action="Details" asp-route-id="@task.Id" class="btn btn-success btn-sm">

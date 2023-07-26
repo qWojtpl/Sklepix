@@ -1,4 +1,5 @@
-﻿using Sklepix.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using Sklepix.Data;
 using Sklepix.Data.Entities;
 
 namespace Sklepix.Repositories
@@ -15,6 +16,7 @@ namespace Sklepix.Repositories
         public List<TaskEntity> List()
         {
             return _context.Tasks
+                .Include(n => n.User)
                 .Select(n => n)
                 .ToList();
         }
@@ -22,6 +24,7 @@ namespace Sklepix.Repositories
         public TaskEntity? One(int id)
         {
             return _context.Tasks
+                .Include(n => n.User)
                 .FirstOrDefault(n => n.Id == id);
         }
 

@@ -10,7 +10,7 @@ namespace Sklepix.Models.ViewModels
         public string? Description { get; set; }
         public string UserName { get; set; }
         public int Status { get; set; }
-        public DateTime AssignTime { get; set; }
+        public DateTime AssignDate { get; set; }
         public DateTime Deadline { get; set; }
         public int Priority { get; set; }
         public string? Comment { get; set; }

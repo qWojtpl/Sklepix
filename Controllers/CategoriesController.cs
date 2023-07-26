@@ -194,6 +194,11 @@ namespace Sklepix.Controllers
 
         private bool IsCategoryCorrect(CategoryDto category)
         {
+            if(category.Name == null)
+            {
+                ModelState.AddModelError("Name", "This field is required");
+                return false;
+            }
             List<CategoryEntity> categories = _repository.List();
             foreach(CategoryEntity e in categories)
             {
