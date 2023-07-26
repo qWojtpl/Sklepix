@@ -6,6 +6,7 @@ using Sklepix.Data.Entities;
 using Sklepix.Models.DataTransferObjects;
 using Sklepix.Models.ViewModels;
 using Sklepix.Repositories;
+using System.Threading.Tasks;
 
 namespace Sklepix.Controllers
 {
@@ -42,6 +43,7 @@ namespace Sklepix.Controllers
                     Description = e.Description,
                     Priority = e.Priority,
                     Status = e.Status,
+                    StatusString = GetStatusString(e.Status),
                     UserName = e.User.Email
                 });
             }
@@ -69,6 +71,7 @@ namespace Sklepix.Controllers
                 Description = task.Description,
                 Priority = task.Priority,
                 Status = task.Status,
+                StatusString = GetStatusString(task.Status),
                 UserName = task.User.Email
             });
         }
@@ -211,6 +214,21 @@ namespace Sklepix.Controllers
                 userNames.Add(user.UserName);
             }
             return userNames;
+        }
+
+        public string GetStatusString(int status)
+        {
+            switch(status)
+            {
+                case 0:
+                    return "Waiting for confirmation";
+                case 1:
+                    return "In progress";
+                case 2:
+                    return "Closed";
+                default:
+                    return "Unknown";
+            }
         }
 
     }

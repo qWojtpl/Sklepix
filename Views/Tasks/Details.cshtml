@@ -17,7 +17,11 @@
 
 <span>Assign date: <b>@Model.AssignDate</b></span><br />
 <span>Deadline: <b>@Model.Deadline</b></span><br />
-<span>Status: <b>@Model.Status</b></span><br />
+<span>Status: <b>@Model.StatusString</b></span><br />
+@if(Model.Comment != null)
+{
+    <span>Comment: <b>@Model.Comment</b></span><br />
+}
 <span>Priority: <b>@Model.Priority</b></span><br /><br />
 
 @if(Model.UserName == null || Model.UserName == "")

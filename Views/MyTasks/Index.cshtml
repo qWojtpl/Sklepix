@@ -4,17 +4,15 @@
     ViewData["Title"] = "Tasks";
 }
 
-<a asp-action="Create" class="btn btn-secondary float-end">
-    <span>Assign task</span>
-</a>
+<br />
 
 <table class="table align-middle">
     <thead>
         <tr>
             <th scope="col" style="width: 4px;">ID</th>
             <th scope="col">Name</th>
-            <th scope="col">User</th>
             <th scope="col">Deadline</th>
+            <th scope="col">Priority</th>
             <th scope="col">Status</th>
             <th scope="col" style="width: 25%;">Actions</th>
         </tr>
@@ -30,10 +28,10 @@
                     <a asp-action="Details" asp-route-id="@task.Id" class="text-reset text-decoration-none"><b>@task.Name</b></a>
                 </td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@task.Id" class="text-reset text-decoration-none"><b>@task.UserName</b></a>
+                    <a asp-action="Details" asp-route-id="@task.Id" class="text-reset text-decoration-none"><b style="color: @task.DeadlineColor">@task.Deadline</b></a>
                 </td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@task.Id" class="text-reset text-decoration-none"><b>@task.Deadline</b></a>
+                    <a asp-action="Details" asp-route-id="@task.Id" class="text-reset text-decoration-none"><b>@task.Priority</b></a>
                 </td>
                 <td>
                     <a asp-action="Details" asp-route-id="@task.Id" class="text-reset text-decoration-none"><b>@task.StatusString</b></a>
@@ -41,9 +39,6 @@
                 <td>
                     <a asp-action="Details" asp-route-id="@task.Id" class="btn btn-success btn-sm">
                         <span>Details</span>
-                    </a>
-                    <a asp-action="Edit" asp-route-id="@task.Id" class="btn btn-info btn-sm">
-                        <span>Edit</span>
                     </a>
                 </td>
             </tr>

@@ -1,0 +1,70 @@
+﻿@using Sklepix.Data.Entities
+@using Sklepix.Models.ViewModels
+@model TaskVm
+@{
+    ViewData["Title"] = "Task details";
+}
+
+<a asp-action="Index" class="btn btn-primary">
+    <span>Go back</span>
+</a>
+
+<br />
+<br />
+
+<h3>@Model.Name</h3>
+<hr/>
+
+<span>Assign date: <b>@Model.AssignDate</b></span><br />
+<span>Deadline: <b>@Model.Deadline</b></span><br />
+<span>Status: <b>@Model.StatusString</b></span><br />
+@if (Model.Comment != null)
+{
+    <span>Comment: <b>@Model.Comment</b></span><br />
+}
+<span>Priority: <b>@Model.Priority</b></span><br /><br />
+
+@if(Model.UserName == null || Model.UserName == "")
+{
+    <span class="form-control text-danger">No user is assigned to this task (?)</span>
+} else {
+    <span class="form-control">User assigned: @Model.UserName</span>
+}
+
+<br />
+
+@if(Model.Description == null)
+{
+    <span class="form-control text-danger">No description found</span>
+} else {
+    <span class="form-control">@Model.Description</span>
+}
+
+<br />
+<hr />
+<br />
+
+<center>
+    <h2>Actions</h2>
+    <br />
+    <form method="post" asp-action="Change">
+    <input type="hidden" asp-for="Id" value="@Model.Id">
+    <input type="hidden" asp-for="Deadline" value="@Model.Deadline">
+    <input type="hidden" asp-for="AssignDate" value="@Model.AssignDate">
+    <input type="hidden" asp-for="Description" value="@Model.Description">
+    <input type="hidden" asp-for="Priority" value="@Model.Priority">
+    <input type="hidden" asp-for="Status" value="@Model.Status">
+    <input type="hidden" asp-for="UserName" value="@Model.UserName">
+    <input type="hidden" asp-for="Name" value="@Model.Name">
+    @if(Model.Status == 0) 
+    {
+        <input type="submit" class="btn btn-success" value="Click to accept task">
+    } else if(Model.Status == 1) {
+        <textarea asp-for="Comment" class="form-control" placeholder="You can leave a comment before closing this task." style="max-width:600px;"></textarea>
+        <br />
+        <input type="submit" class="btn btn-success" value="Click to close task">
+    } else {
+        <span><i>No actions available...</i></span>
+    }
+    </form>
+</center>
