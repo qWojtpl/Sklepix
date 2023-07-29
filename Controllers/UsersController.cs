@@ -73,12 +73,14 @@ namespace Sklepix.Controllers
             {
                 return RedirectToAction("Index", "Users");
             }
+            List<string> roles = new List<string>(await _userManager.GetRolesAsync(user));
+            roles.Sort();
             return View(new UserVm()
             {
                 Id = user.Id,
                 Mail = user.Email,
                 Description = user.Description,
-                Roles = new List<string>(await _userManager.GetRolesAsync(user))
+                Roles = roles
             });
         }
 
@@ -223,6 +225,7 @@ namespace Sklepix.Controllers
             {
                 roleNames.Add(role.Name);
             }
+            roleNames.Sort();
             return roleNames;
         }
 

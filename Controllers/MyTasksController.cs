@@ -30,9 +30,12 @@ namespace Sklepix.Controllers
         public ActionResult Index()
         {
             UserEntity? currentUser = _usersRepository.GetMyUser();
-            if (currentUser == null)
+            if(currentUser == null)
             {
-                return View(new TaskIndexVm());
+                return View(new TaskIndexVm()
+                {
+                    Tasks = new()
+                });
             }
             List<TaskEntity> entities = _repository.List(currentUser.Id);
             List<TaskVm> views = new List<TaskVm>();

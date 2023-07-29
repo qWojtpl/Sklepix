@@ -221,7 +221,7 @@ namespace Sklepix.Controllers
             switch(status)
             {
                 case 0:
-                    return "Waiting for confirmation";
+                    return "Waiting for user action";
                 case 1:
                     return "In progress";
                 case 2:

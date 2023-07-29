@@ -18,11 +18,7 @@
 <span>Assign date: <b>@Model.AssignDate</b></span><br />
 <span>Deadline: <b>@Model.Deadline</b></span><br />
 <span>Status: <b>@Model.StatusString</b></span><br />
-@if (Model.Comment != null)
-{
-    <span>Comment: <b>@Model.Comment</b></span><br />
-}
-<span>Priority: <b>@Model.Priority</b></span><br /><br />
+<span>Priority: <b>@Model.Priority</b></span><br />
 
 @if(Model.UserName == null || Model.UserName == "")
 {
@@ -32,12 +28,22 @@
 }
 
 <br />
+<br />
 
 @if(Model.Description == null)
 {
     <span class="form-control text-danger">No description found</span>
 } else {
     <span class="form-control">@Model.Description</span>
+}
+
+<br />
+
+@if(Model.Comment == null)
+{
+    <span class="form-control text-danger">No comment found</span>
+} else {
+    <span class="form-control">@Model.Comment</span>
 }
 
 <br />
