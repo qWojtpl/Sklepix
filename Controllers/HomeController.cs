@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Sklepix.Repositories;
 using Sklepix.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Sklepix.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         public readonly CategoriesRepository _categoriesRepository;
